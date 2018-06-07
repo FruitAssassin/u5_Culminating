@@ -23,10 +23,11 @@ namespace u5_Culminating
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
+        int Velocity = 30;
 
 
         //Create Sprites
-        ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
+        //ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
 
         public f_Apple(Canvas c, MainWindow w)
         {
@@ -36,7 +37,7 @@ namespace u5_Culminating
 
             ApplePos = point;
             AppleRectangle = new Rectangle();
-            AppleRectangle.Fill = s_f_Apple;
+            AppleRectangle.Fill = Brushes.Green;
             AppleRectangle.Height = 64;
             AppleRectangle.Width = 64;
             canvas.Children.Add(AppleRectangle);
@@ -49,11 +50,12 @@ namespace u5_Culminating
 
         public void Tick()
         {
-            
+            Movement();
         }
 
         private void Movement()
         {
+            point.Y = (Velocity * Globals.difficulty) - 0.2;
         }
 
         public void destroy()
