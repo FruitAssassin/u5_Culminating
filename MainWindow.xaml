@@ -1,0 +1,25 @@
+﻿<Window x:Class="u5_Culminating.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:u5_Culminating"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="680" Width="680" MaxHeight="680" MaxWidth="680">
+
+
+    <Grid x:Name="grid_pageController" Visibility="Visible">
+        <Canvas x:Name="canvas_mainmenu" Visibility="Visible" Background="Black">
+            <Button Click="Click_Play" Content="Play" Width="100" Height="30" FontSize="20" Canvas.Left="286" Canvas.Top="136" RenderTransformOrigin="0.48,-0.25"/>
+            <Button Click="Click_Settings"  Content="Settings" Width="100" Height="30" FontSize="20" Canvas.Left="286" Canvas.Top="171" RenderTransformOrigin="0.48,-0.25"/>
+        </Canvas>
+
+        <Canvas x:Name="canvas_battleground" Visibility="Visible">
+        </Canvas>
+
+        <Canvas x:Name="canvas_leaderboard" Visibility="Hidden">
+
+        </Canvas>
+    </Grid>
+
+</Window>
