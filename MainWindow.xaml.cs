@@ -27,7 +27,7 @@ namespace u5_Culminating
 
 
 
-    public enum GameState { MainMenu, GameOn, GameOver }
+    public enum GameState { MainMenu, GameOn, GameOver, Settings }
 
 
     public static class Globals
@@ -40,6 +40,7 @@ namespace u5_Culminating
         public static int PineApplesCreated = 0;
         public static int BananasCreated = 0;
         public static int WatermelonCreated = 0;
+        public static int Difficulty = 1;
 
         public static ImageBrush MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Background.png", UriKind.Relative)));
 
@@ -60,8 +61,8 @@ namespace u5_Culminating
 
 
         TextBlock txt_Begin = new TextBlock();
-        public TextBox inpt_name = new TextBox();
-        public TextBlock txt_name = new TextBlock();
+        public ComboBox CB_Difficulty = new ComboBox();
+        public TextBlock txt_Difficulty = new TextBlock();
 
         public MainWindow()
         {
@@ -110,17 +111,84 @@ namespace u5_Culminating
         {
             if (gameState == GameState.GameOn)
             {
+
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
                     Sword player = new Sword(canvas_battleground, this);
                 }
             }
+
+            if (gameState == GameState.Settings)
+            {
+                if(CB_Difficulty.Text == "Easy")
+                {
+                    Globals.Difficulty = 1;
+                }
+                else if (CB_Difficulty.Text == "Medium")
+                {
+                    Globals.Difficulty = 2;
+                }
+                else if (CB_Difficulty.Text == "Hard")
+                {
+                    Globals.Difficulty = 3;
+                }
+            }
+
         }
 
 
         public void Click_Play(object sender, RoutedEventArgs e)
         {
+            if (gameState == GameState.MainMenu)
+            {
+                canvas_mainmenu.Visibility = Visibility.Hidden;
+                canvas_battleground.Visibility = Visibility.Visible;
+            }
+
+            Console.WriteLine(Globals.Difficulty);
             gameState = GameState.GameOn;
+        }
+        public void Click_Settings(object sender, RoutedEventArgs e)
+        {
+            canvas_settings.Children.Clear();
+
+            txt_Difficulty.Text = "Difficulty:";
+            txt_Difficulty.TextEffects = Bold
+
+
+            CB_Difficulty.Width = 100;
+            CB_Difficulty.DropDownOpened += new EventHandler(CB_Difficulty_Down);
+            CB_Difficulty.Items.Add("Easy");
+            CB_Difficulty.Items.Add("Medium");
+            CB_Difficulty.Items.Add("Hard");
+            canvas_settings.Children.Add(CB_Difficulty);
+            Canvas.SetTop(CB_Difficulty, 20);
+
+
+
+
+            if (gameState == GameState.MainMenu)
+            {
+                canvas_mainmenu.Visibility = Visibility.Hidden;
+                canvas_settings.Visibility = Visibility.Visible;
+            }
+
+            gameState = GameState.Settings;
+        }
+
+        public void CB_Difficulty_Down(object Sender, EventArgs e)
+        {
+        }
+
+        public void Click_Back(object sender, RoutedEventArgs e)
+        {
+            if (gameState == GameState.Settings)
+            {
+                canvas_mainmenu.Visibility = Visibility.Visible;
+                canvas_settings.Visibility = Visibility.Hidden;
+            }
+
+            gameState = GameState.MainMenu;
         }
     }
 }
