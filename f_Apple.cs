@@ -48,19 +48,43 @@ namespace u5_Culminating
 
         }
 
+
+
+
         public void Tick()
         {
             Movement();
         }
 
+
+
+
+
         private void Movement()
         {
             point.Y = (Velocity * Globals.difficulty) - 0.2;
+            point.X = (Velocity * Globals.difficulty) + 0.2;
+            
         }
+
+
+
 
         public void destroy()
         {
-            canvas.Children.Remove(AppleRectangle);
+          
+           /* if (ApplePos == Sword)
+            {
+                canvas.Children.Remove(AppleRectangle);
+
+
+
+            }
+            */
+
+
+
+
         }
 
     }
