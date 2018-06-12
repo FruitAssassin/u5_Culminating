@@ -24,6 +24,7 @@ namespace u5_Culminating
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
+        
 
 
         //Create Sprites
@@ -53,13 +54,17 @@ namespace u5_Culminating
 
         private void Movement()
         {
+            
         }
 
-        public void destroy()
+        private void Slice()
         {
-            canvas.Children.Remove(SwordRectangle);
+            if (!MouseButton.Left.Equals(MouseButtonState.Pressed))
+            {
+                Canvas.SetTop(SwordRectangle, 1000);
+            }
         }
 
     }
+   }
 
-}
