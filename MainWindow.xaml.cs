@@ -63,6 +63,7 @@ namespace u5_Culminating
         TextBlock txt_Begin = new TextBlock();
         public ComboBox CB_Difficulty = new ComboBox();
         public TextBlock txt_Difficulty = new TextBlock();
+        Button btn_Back = new Button();
 
         public MainWindow()
         {
@@ -139,6 +140,8 @@ namespace u5_Culminating
 
         public void Click_Play(object sender, RoutedEventArgs e)
         {
+
+            f_Apple
             if (gameState == GameState.MainMenu)
             {
                 canvas_mainmenu.Visibility = Visibility.Hidden;
@@ -153,7 +156,14 @@ namespace u5_Culminating
             canvas_settings.Children.Clear();
 
             txt_Difficulty.Text = "Difficulty:";
-            txt_Difficulty.TextEffects = Bold
+            canvas_settings.Children.Add(txt_Difficulty);
+
+            btn_Back.Content = "Back";
+            btn_Back.Width = 90;
+            Canvas.SetLeft(btn_Back, 10);
+            Canvas.SetTop(btn_Back, 619);
+            btn_Back.Click += new RoutedEventHandler(Click_Back);
+            canvas_settings.Children.Add(btn_Back);
 
 
             CB_Difficulty.Width = 100;

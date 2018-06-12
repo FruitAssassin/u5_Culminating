@@ -20,8 +20,8 @@
 
         </Canvas>
 
-        <Canvas x:Name="canvas_settings" Visibility="Visible">
-            <Button x:Name="btn_Back" Click="Click_Back" Content="Back" Canvas.Left="10" Canvas.Top="619" Width="90"/>
+        <Canvas x:Name="canvas_settings" Visibility="Hidden">
+            <Button x:Name="btn_Bac" Click="Click_Back" Content="Back" Canvas.Left="10" Canvas.Top="619" Width="90"/>
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 
