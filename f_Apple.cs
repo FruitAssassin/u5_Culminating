@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Collections;
 
 namespace u5_Culminating
 {
@@ -23,7 +24,7 @@ namespace u5_Culminating
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
-        int Velocity = 30;
+        int Velocity = -43;
 
 
         //Create Sprites
@@ -35,9 +36,11 @@ namespace u5_Culminating
             canvas = c;
             window = w;
 
+            ImageBrush s_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Apple.png", UriKind.Relative)));
+
             ApplePos = point;
             AppleRectangle = new Rectangle();
-            AppleRectangle.Fill = Brushes.Green;
+            AppleRectangle.Fill = s_Apple;
             AppleRectangle.Height = 64;
             AppleRectangle.Width = 64;
             canvas.Children.Add(AppleRectangle);
@@ -45,8 +48,10 @@ namespace u5_Culminating
             Canvas.SetLeft(AppleRectangle, point.X);
             box = new Rect(point, new Size(64, 64));
             int rOthernumber = r.Next();
+            point.Y = 690;
+            point.X = 200;
 
-        }
+    }
 
 
 
@@ -54,6 +59,10 @@ namespace u5_Culminating
         public void Tick()
         {
             Movement();
+            Velocity = Velocity + 2;
+
+            Canvas.SetTop(AppleRectangle, point.Y);
+            Canvas.SetLeft(AppleRectangle, point.X);
         }
 
 
@@ -62,9 +71,9 @@ namespace u5_Culminating
 
         private void Movement()
         {
-            point.Y = (Velocity * Globals.difficulty) - 0.2;
-            point.X = (Velocity * Globals.difficulty) + 0.2;
-            
+            point.Y = point.Y + (Velocity);
+            point.X = point.X + 5;
+
         }
 
 
@@ -72,15 +81,12 @@ namespace u5_Culminating
 
         public void destroy()
         {
-          
-           /* if (ApplePos == Sword)
-            {
-                canvas.Children.Remove(AppleRectangle);
 
-
-
-            }
-            */
+            /* if (ApplePos == Sword)
+             {
+                 canvas.Children.Remove(AppleRectangle);
+             }
+             */
 
 
 
