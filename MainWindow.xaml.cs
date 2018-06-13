@@ -42,6 +42,8 @@ namespace u5_Culminating
         public static int WatermelonCreated = 0;
         public static int Difficulty = 1;
 
+        public static Point p_mouse;
+
         public static ImageBrush MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Background.png", UriKind.Relative)));
 
 
@@ -65,17 +67,25 @@ namespace u5_Culminating
         public TextBlock txt_Difficulty = new TextBlock();
         Button btn_Back = new Button();
 
+        List<f_Apple> applelist = new List<f_Apple>();
+        List<Sword> swordlist = new List<Sword>();
+
         public MainWindow()
         {
             InitializeComponent();
+            this.Title = "Fruit Assasian";
 
             gameTimer.Tick += gameTimer_Tick;
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
 
             canvas_mainmenu.Background = Globals.MMBackground;
+            canvas_battleground.Background = Globals.MMBackground;
             canvas_mainmenu.Visibility = Visibility.Visible;
             gameState = GameState.MainMenu;
+            Globals.p_mouse = Mouse.GetPosition(this);
+            Console.WriteLine(Mouse.GetPosition(this));
+
 
         }
 
@@ -112,10 +122,21 @@ namespace u5_Culminating
         {
             if (gameState == GameState.GameOn)
             {
+                foreach (f_Apple a in applelist)
+                {
+                    a.Tick();
+                }
+                foreach (Sword s in swordlist)
+                {
+                    s.Tick();
+                }
 
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
                     Sword player = new Sword(canvas_battleground, this);
+                    swordlist.Add(player);
+                    Globals.p_mouse = Mouse.GetPosition(this);
+                    Console.WriteLine(Globals.p_mouse.ToString());
                 }
             }
 
@@ -141,11 +162,12 @@ namespace u5_Culminating
         public void Click_Play(object sender, RoutedEventArgs e)
         {
 
-            f_Apple
             if (gameState == GameState.MainMenu)
             {
                 canvas_mainmenu.Visibility = Visibility.Hidden;
                 canvas_battleground.Visibility = Visibility.Visible;
+                f_Apple apple = new f_Apple(canvas_battleground, this);
+                applelist.Add(apple);
             }
 
             Console.WriteLine(Globals.Difficulty);
