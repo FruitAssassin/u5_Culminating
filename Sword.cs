@@ -24,7 +24,7 @@ namespace u5_Culminating
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
-        
+
 
 
         //Create Sprites
@@ -41,8 +41,8 @@ namespace u5_Culminating
             SwordRectangle.Height = 64;
             SwordRectangle.Width = 128;
             canvas.Children.Add(SwordRectangle);
-            Canvas.SetTop(SwordRectangle, point.Y);
-            Canvas.SetLeft(SwordRectangle, point.X);
+            Canvas.SetTop(SwordRectangle, Globals.p_mouse.Y - 30);
+            Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X - 60);
             box = new Rect(point, new Size(64, 64));
             int rOthernumber = r.Next();
 
@@ -50,21 +50,26 @@ namespace u5_Culminating
 
         public void Tick()
         {
+            Movement();
         }
 
         private void Movement()
-        {
-            
-        }
-
-        private void Slice()
         {
             if (!MouseButton.Left.Equals(MouseButtonState.Pressed))
             {
                 Canvas.SetTop(SwordRectangle, 1000);
             }
+            if (MouseButton.Left.Equals(MouseButtonState.Pressed))
+            {
+                Canvas.SetTop(SwordRectangle, Globals.p_mouse.Y);
+                Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X);
+            }
+            
+        }
+
+        private void Slice()
+        {
         }
 
     }
-   }
-
+}
