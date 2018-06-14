@@ -51,24 +51,24 @@ namespace u5_Culminating
         public void Tick()
         {
             Movement();
+            box.X = Globals.p_mouse.X;
+
         }
 
         private void Movement()
         {
-            if (!MouseButton.Left.Equals(MouseButtonState.Pressed))
+            if (!(Mouse.LeftButton.Equals(MouseButtonState.Pressed)))
             {
-                Canvas.SetTop(SwordRectangle, 1000);
+                SwordRectangle.Visibility = Visibility.Hidden;
             }
-            if (MouseButton.Left.Equals(MouseButtonState.Pressed))
+            if (Mouse.LeftButton.Equals(MouseButtonState.Pressed))
             {
-                Canvas.SetTop(SwordRectangle, Globals.p_mouse.Y);
-                Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X);
+                Globals.p_mouse = Mouse.GetPosition(window);
+                Canvas.SetTop(SwordRectangle, Globals.p_mouse.Y - 30);
+                Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X - 60);
+                SwordRectangle.Visibility = Visibility.Visible;
             }
             
-        }
-
-        private void Slice()
-        {
         }
 
     }
