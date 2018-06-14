@@ -131,13 +131,6 @@ namespace u5_Culminating
                     s.Tick();
                 }
 
-                if (Mouse.LeftButton == MouseButtonState.Pressed)
-                {
-                    Sword player = new Sword(canvas_battleground, this);
-                    swordlist.Add(player);
-                    Globals.p_mouse = Mouse.GetPosition(this);
-                    Console.WriteLine(Globals.p_mouse.ToString());
-                }
             }
 
             if (gameState == GameState.Settings)
@@ -168,6 +161,9 @@ namespace u5_Culminating
                 canvas_battleground.Visibility = Visibility.Visible;
                 f_Apple apple = new f_Apple(canvas_battleground, this);
                 applelist.Add(apple);
+
+                Sword player = new Sword(canvas_battleground, this);
+                swordlist.Add(player);
             }
 
             Console.WriteLine(Globals.Difficulty);
