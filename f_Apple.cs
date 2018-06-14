@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +28,7 @@ namespace u5_Culminating
 
 
         //Create Sprites
-        //ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
+        ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
 
         public f_Apple(Canvas c, MainWindow w)
         {
@@ -51,7 +51,7 @@ namespace u5_Culminating
             point.Y = 690;
             point.X = 200;
 
-    }
+        }
 
 
 
@@ -76,6 +76,19 @@ namespace u5_Culminating
 
         }
 
+        public bool collidesWith(Sword bunk)
+        {
+            if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
+                && this.boundingBox.Y + 16 < (bunk.boundingBox.Y + 64) && this.boundingBox.Y + 16 > bunk.boundingBox.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
 
 
 
@@ -86,8 +99,7 @@ namespace u5_Culminating
              {
                  canvas.Children.Remove(AppleRectangle);
              }
-             */
-
+            */
 
 
 
