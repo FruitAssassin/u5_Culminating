@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +21,7 @@ namespace u5_Culminating
         Canvas canvas;
         MainWindow window;
         Rectangle AppleRectangle;
+        Rectangle AppleSlice;
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
@@ -28,7 +29,6 @@ namespace u5_Culminating
 
 
         //Create Sprites
-        ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
 
         public f_Apple(Canvas c, MainWindow w)
         {
@@ -37,24 +37,30 @@ namespace u5_Culminating
             window = w;
 
             ImageBrush s_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Apple.png", UriKind.Relative)));
+            ImageBrush s_AppleSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice.png", UriKind.Relative)));
 
+            point.Y = 690;
+            point.X = 200;
             ApplePos = point;
             AppleRectangle = new Rectangle();
+            AppleSlice = new Rectangle();
+            Canvas.SetTop(AppleRectangle, point.Y);
+            Canvas.SetLeft(AppleRectangle, point.X);
             AppleRectangle.Fill = s_Apple;
+            AppleSlice.Fill = s_AppleSlice;
             AppleRectangle.Height = 64;
             AppleRectangle.Width = 64;
             canvas.Children.Add(AppleRectangle);
-            Canvas.SetTop(AppleRectangle, point.Y);
-            Canvas.SetLeft(AppleRectangle, point.X);
             box = new Rect(point, new Size(64, 64));
             int rOthernumber = r.Next();
-            point.Y = 690;
-            point.X = 200;
+
+            
 
         }
 
 
 
+        
 
         public void Tick()
         {
@@ -63,9 +69,13 @@ namespace u5_Culminating
 
             Canvas.SetTop(AppleRectangle, point.Y);
             Canvas.SetLeft(AppleRectangle, point.X);
+            box.X = point.X;
+            box.Y = point.Y;
+
+
         }
 
-
+        
 
 
 
@@ -73,13 +83,12 @@ namespace u5_Culminating
         {
             point.Y = point.Y + (Velocity);
             point.X = point.X + 5;
-
         }
 
-        public bool collidesWith(Sword bunk)
+        public bool collidesWith(Sword sword)
         {
-            if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
-                && this.boundingBox.Y + 16 < (bunk.boundingBox.Y + 64) && this.boundingBox.Y + 16 > bunk.boundingBox.Y)
+            if (this.boundingBox.X > (sword.boundingBox.X) && this.boundingBox.X < (sword.boundingBox.X + 128)
+                && this.boundingBox.Y < (sword.boundingBox.Y + 128) && this.boundingBox.Y > sword.boundingBox.Y)
             {
                 return true;
             }
@@ -88,22 +97,21 @@ namespace u5_Culminating
                 return false;
             }
         }
-        
+
 
 
 
         public void destroy()
         {
 
-            /* if (ApplePos == Sword)
-             {
-                 canvas.Children.Remove(AppleRectangle);
-             }
-            */
+            canvas.Children.Remove(AppleRectangle);
+
 
 
 
         }
+
+ 
 
     }
 
