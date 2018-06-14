@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -69,6 +69,7 @@ namespace u5_Culminating
 
         List<f_Apple> applelist = new List<f_Apple>();
         List<Sword> swordlist = new List<Sword>();
+        List<f_Apple> appletodestroy = new List<f_Apple>();
 
         public MainWindow()
         {
@@ -122,9 +123,12 @@ namespace u5_Culminating
         {
             if (gameState == GameState.GameOn)
             {
+
+                CheckCollision();
+
                 foreach (f_Apple a in applelist)
                 {
-                    a.Tick();
+                        a.Tick();
                 }
                 foreach (Sword s in swordlist)
                 {
@@ -133,9 +137,11 @@ namespace u5_Culminating
 
             }
 
+
+
             if (gameState == GameState.Settings)
             {
-                if(CB_Difficulty.Text == "Easy")
+                if (CB_Difficulty.Text == "Easy")
                 {
                     Globals.Difficulty = 1;
                 }
@@ -149,6 +155,21 @@ namespace u5_Culminating
                 }
             }
 
+        }
+
+        public void CheckCollision()
+        {
+            foreach (f_Apple a in applelist)
+            {
+                foreach (Sword s in swordlist)
+                {
+                    if (a.collidesWith(s))
+                    {
+                        a.destroy();
+                        appletodestroy.Add(a);
+                    }
+                }
+            }
         }
 
 
