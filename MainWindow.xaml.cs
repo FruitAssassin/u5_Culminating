@@ -45,7 +45,7 @@ namespace u5_Culminating
         public static Point p_mouse;
 
         public static ImageBrush MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Background.png", UriKind.Relative)));
-
+        public static ImageBrush RBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Wall.png", UriKind.Relative)));
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
@@ -70,6 +70,7 @@ namespace u5_Culminating
         List<f_Apple> applelist = new List<f_Apple>();
         List<Sword> swordlist = new List<Sword>();
         List<f_Apple> appletodestroy = new List<f_Apple>();
+        List<f_AppleSlice> appleslicecreate = new List<f_AppleSlice>();
 
         public MainWindow()
         {
@@ -81,7 +82,7 @@ namespace u5_Culminating
             gameTimer.Start();
 
             canvas_mainmenu.Background = Globals.MMBackground;
-            canvas_battleground.Background = Globals.MMBackground;
+            canvas_battleground.Background = Globals.RBackground;
             canvas_mainmenu.Visibility = Visibility.Visible;
             gameState = GameState.MainMenu;
             Globals.p_mouse = Mouse.GetPosition(this);
@@ -163,11 +164,15 @@ namespace u5_Culminating
             {
                 foreach (Sword s in swordlist)
                 {
-                    if (a.collidesWith(s))
-                    {
-                        a.destroy();
-                        appletodestroy.Add(a);
-                    }
+                        if (a.collidesWith(s))
+                        {
+                            a.destroy();
+                            appletodestroy.Add(a);
+
+                            f_AppleSlice appleSlice = new f_AppleSlice(canvas_battleground, this);
+                            appleslicecreate.Add(appleSlice);
+                            appleSlice.point = a.Point;
+                        }
                 }
             }
         }
