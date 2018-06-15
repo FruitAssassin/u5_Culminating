@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,14 +21,16 @@ namespace u5_Culminating
         Canvas canvas;
         MainWindow window;
         Rectangle AppleRectangle;
-        Rectangle AppleSlice;
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
+        Random x_random = new Random();
         int Velocity = -43;
+        string movement;
 
 
         //Create Sprites
+        //ImageBrush s_f_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
 
         public f_Apple(Canvas c, MainWindow w)
         {
@@ -37,30 +39,34 @@ namespace u5_Culminating
             window = w;
 
             ImageBrush s_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Apple.png", UriKind.Relative)));
-            ImageBrush s_AppleSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice.png", UriKind.Relative)));
 
             point.Y = 690;
-            point.X = 200;
+            point.X = 150 + x_random.Next(0, 251);
+            if (point.X < 300)
+            {
+                movement = "left";
+            }
+            else if (point.X > 300)
+            {
+                movement = "right";
+            }
             ApplePos = point;
             AppleRectangle = new Rectangle();
-            AppleSlice = new Rectangle();
-            Canvas.SetTop(AppleRectangle, point.Y);
-            Canvas.SetLeft(AppleRectangle, point.X);
             AppleRectangle.Fill = s_Apple;
-            AppleSlice.Fill = s_AppleSlice;
             AppleRectangle.Height = 64;
             AppleRectangle.Width = 64;
             canvas.Children.Add(AppleRectangle);
+            Canvas.SetTop(AppleRectangle, point.Y);
+            Canvas.SetLeft(AppleRectangle, point.X);
             box = new Rect(point, new Size(64, 64));
             int rOthernumber = r.Next();
 
-            
+
 
         }
 
 
 
-        
 
         public void Tick()
         {
@@ -69,33 +75,24 @@ namespace u5_Culminating
 
             Canvas.SetTop(AppleRectangle, point.Y);
             Canvas.SetLeft(AppleRectangle, point.X);
-            box.X = point.X;
-            box.Y = point.Y;
-
-
         }
 
-        
+
 
 
 
         private void Movement()
         {
             point.Y = point.Y + (Velocity);
-            point.X = point.X + 5;
-        }
+            if (movement == "left")
+            {
+                point.X = point.X + 5;
+            }
+            else if (movement == "right")
+            {
+                point.X = point.X - 5;
+            }
 
-        public bool collidesWith(Sword sword)
-        {
-            if (this.boundingBox.X > (sword.boundingBox.X) && this.boundingBox.X < (sword.boundingBox.X + 128)
-                && this.boundingBox.Y < (sword.boundingBox.Y + 128) && this.boundingBox.Y > sword.boundingBox.Y)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
 
@@ -104,14 +101,16 @@ namespace u5_Culminating
         public void destroy()
         {
 
-            canvas.Children.Remove(AppleRectangle);
+            /* if (ApplePos == Sword)
+             {
+                 canvas.Children.Remove(AppleRectangle);
+             }
+             */
 
 
 
 
         }
-
- 
 
     }
 

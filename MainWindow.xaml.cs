@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,6 +47,7 @@ namespace u5_Culminating
         public static ImageBrush MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Background.png", UriKind.Relative)));
         public static ImageBrush RBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Dojo Wall.png", UriKind.Relative)));
 
+
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
 
@@ -69,8 +70,6 @@ namespace u5_Culminating
 
         List<f_Apple> applelist = new List<f_Apple>();
         List<Sword> swordlist = new List<Sword>();
-        List<f_Apple> appletodestroy = new List<f_Apple>();
-        List<f_AppleSlice> appleslicecreate = new List<f_AppleSlice>();
 
         public MainWindow()
         {
@@ -124,12 +123,9 @@ namespace u5_Culminating
         {
             if (gameState == GameState.GameOn)
             {
-
-                CheckCollision();
-
                 foreach (f_Apple a in applelist)
                 {
-                        a.Tick();
+                    a.Tick();
                 }
                 foreach (Sword s in swordlist)
                 {
@@ -138,11 +134,9 @@ namespace u5_Culminating
 
             }
 
-
-
             if (gameState == GameState.Settings)
             {
-                if (CB_Difficulty.Text == "Easy")
+                if(CB_Difficulty.Text == "Easy")
                 {
                     Globals.Difficulty = 1;
                 }
@@ -156,25 +150,6 @@ namespace u5_Culminating
                 }
             }
 
-        }
-
-        public void CheckCollision()
-        {
-            foreach (f_Apple a in applelist)
-            {
-                foreach (Sword s in swordlist)
-                {
-                        if (a.collidesWith(s))
-                        {
-                            a.destroy();
-                            appletodestroy.Add(a);
-
-                            f_AppleSlice appleSlice = new f_AppleSlice(canvas_battleground, this);
-                            appleslicecreate.Add(appleSlice);
-                            appleSlice.point = a.Point;
-                        }
-                }
-            }
         }
 
 
