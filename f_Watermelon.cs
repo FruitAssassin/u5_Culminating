@@ -12,29 +12,29 @@ using System.Collections;
 
 namespace u5_Culminating
 {
-    class f_Apple
+    class f_Watermelon
     {
         //Generate Player Variables
-        Point ApplePos = new Point();
+        Point WatermelonPos = new Point();
         private Point point;
         public Point Point { get => point; }
         Canvas canvas;
         MainWindow window;
-        Rectangle AppleRectangle;
+        Rectangle WatermelonRectangle;
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
         Random x_random = new Random();
-        int Velocity = -40 - Util.FruitVelocity();
+        int Velocity = -38 - Util.FruitVelocity();
         string movement;
 
-        public f_Apple(Canvas c, MainWindow w)
+        public f_Watermelon(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
 
-            ImageBrush s_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Apple.png", UriKind.Relative)));
+            ImageBrush s_Watermelon = new ImageBrush(new BitmapImage(new Uri(@"Images\Watermelon.png", UriKind.Relative)));
 
             point.Y = 690;
             point.X = 150 + x_random.Next(0, 251);
@@ -46,13 +46,13 @@ namespace u5_Culminating
             {
                 movement = "right";
             }
-            ApplePos = point;
-            AppleRectangle = new Rectangle();
-            AppleRectangle.Fill = s_Apple;
-            AppleRectangle.Height = 64;
-            AppleRectangle.Width = 64;
-            canvas.Children.Add(AppleRectangle);
-            box = new Rect(point, new Size(64, 64));
+            WatermelonPos = point;
+            WatermelonRectangle = new Rectangle();
+            WatermelonRectangle.Fill = s_Watermelon;
+            WatermelonRectangle.Height = 64;
+            WatermelonRectangle.Width = 128;
+            canvas.Children.Add(WatermelonRectangle);
+            box = new Rect(point, new Size(128, 64));
             int rOthernumber = r.Next();
 
 
@@ -67,8 +67,8 @@ namespace u5_Culminating
             Movement();
             Velocity = Velocity + 2;
 
-            Canvas.SetTop(AppleRectangle, point.Y);
-            Canvas.SetLeft(AppleRectangle, point.X);
+            Canvas.SetTop(WatermelonRectangle, point.Y);
+            Canvas.SetLeft(WatermelonRectangle, point.X);
             box.X = point.X;
             box.Y = point.Y;
         }
@@ -107,8 +107,8 @@ namespace u5_Culminating
 
         public void destroy()
         {
-            canvas.Children.Remove(AppleRectangle);
-         
+            canvas.Children.Remove(WatermelonRectangle);
+
 
         }
 

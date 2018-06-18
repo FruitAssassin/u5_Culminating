@@ -11,14 +11,14 @@ using System.Windows.Shapes;
 
 namespace u5_Culminating
 {
-    class f_AppleSlice
+    class f_BananaSlice
     {
         //Generate Player Variables
-        Point AppleSlicePos = new Point();
+        Point BananaSlicePos = new Point();
         public Point point;
         Canvas canvas;
         MainWindow window;
-        Rectangle AppleSliceRectangle;
+        Rectangle BananaSliceRectangle;
         Random r = new Random(5);
         Random rnum = new Random();
         string movement;
@@ -26,22 +26,22 @@ namespace u5_Culminating
 
 
         //Create Sprites
-        ImageBrush s_AppleSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice.png", UriKind.Relative)));
-        ImageBrush s_AppleSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice2.png", UriKind.Relative)));
+        ImageBrush s_BananaSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\PineappleSlice.png", UriKind.Relative)));
+        ImageBrush s_BananaSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\PineappleSlice2.png", UriKind.Relative)));
 
-        public f_AppleSlice(Canvas c, MainWindow w)
+        public f_BananaSlice(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
 
 
-            AppleSlicePos = point;
-            AppleSliceRectangle = new Rectangle();
-            AppleSliceRectangle.Fill = s_AppleSlice;
-            AppleSliceRectangle.Height = 64;
-            AppleSliceRectangle.Width = 64;
-            canvas.Children.Add(AppleSliceRectangle);
+            BananaSlicePos = point;
+            BananaSliceRectangle = new Rectangle();
+            BananaSliceRectangle.Fill = s_BananaSlice;
+            BananaSliceRectangle.Height = 128;
+            BananaSliceRectangle.Width = 64;
+            canvas.Children.Add(BananaSliceRectangle);
             int rOthernumber = r.Next();
 
             if (point.X < 300)
@@ -65,12 +65,12 @@ namespace u5_Culminating
         {
             Movement();
 
-            Canvas.SetTop(AppleSliceRectangle, point.Y);
-            Canvas.SetLeft(AppleSliceRectangle, point.X);
+            Canvas.SetTop(BananaSliceRectangle, point.Y);
+            Canvas.SetLeft(BananaSliceRectangle, point.X);
 
             if (rotation == 180)
             {
-                AppleSliceRectangle.Fill = s_AppleSlice2;
+                BananaSliceRectangle.Fill = s_BananaSlice2;
             }
 
         }
@@ -87,22 +87,22 @@ namespace u5_Culminating
             {
                 if (movement == "left")
                 {
-                    point.X = point.X + (Util.SliceFall() * 2);
+                    point.X = point.X - (Util.SliceFall() * 2);
                 }
                 else if (movement == "right")
                 {
-                    point.X = point.X - (Util.SliceFall() * 2);
+                    point.X = point.X + (Util.SliceFall() * 2);
                 }
             }
             else if (rotation == 180)
             {
                 if (movement == "left")
                 {
-                    point.X = point.X - (Util.SliceFall() * 2);
+                    point.X = point.X + (Util.SliceFall() * 2);
                 }
                 else if (movement == "right")
                 {
-                    point.X = point.X + (Util.SliceFall() * 2);
+                    point.X = point.X - (Util.SliceFall() * 2);
                 }
             }
 
@@ -114,7 +114,7 @@ namespace u5_Culminating
 
         public void destroy()
         {
-            canvas.Children.Remove(AppleSliceRectangle);
+            canvas.Children.Remove(BananaSliceRectangle);
         }
 
     }

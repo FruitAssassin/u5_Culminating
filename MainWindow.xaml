@@ -24,9 +24,9 @@
             <Button x:Name="btn_Bac" Click="Click_Back" Content="Back" Canvas.Left="10" Canvas.Top="619" Width="90"/>
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                
+
                 <TextBlock Text="Difficulty:" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                
+
             </StackPanel>
         </Canvas>
     </Grid>

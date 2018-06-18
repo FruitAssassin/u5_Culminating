@@ -12,15 +12,15 @@ using System.Collections;
 
 namespace u5_Culminating
 {
-    class f_Apple
+    class f_Banana
     {
         //Generate Player Variables
-        Point ApplePos = new Point();
+        Point BananaPos = new Point();
         private Point point;
         public Point Point { get => point; }
         Canvas canvas;
         MainWindow window;
-        Rectangle AppleRectangle;
+        Rectangle BananaRectangle;
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
@@ -28,13 +28,13 @@ namespace u5_Culminating
         int Velocity = -40 - Util.FruitVelocity();
         string movement;
 
-        public f_Apple(Canvas c, MainWindow w)
+        public f_Banana(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
 
-            ImageBrush s_Apple = new ImageBrush(new BitmapImage(new Uri(@"Images\Apple.png", UriKind.Relative)));
+            ImageBrush s_Banana = new ImageBrush(new BitmapImage(new Uri(@"Images\Banana.png", UriKind.Relative)));
 
             point.Y = 690;
             point.X = 150 + x_random.Next(0, 251);
@@ -46,13 +46,13 @@ namespace u5_Culminating
             {
                 movement = "right";
             }
-            ApplePos = point;
-            AppleRectangle = new Rectangle();
-            AppleRectangle.Fill = s_Apple;
-            AppleRectangle.Height = 64;
-            AppleRectangle.Width = 64;
-            canvas.Children.Add(AppleRectangle);
-            box = new Rect(point, new Size(64, 64));
+            BananaPos = point;
+            BananaRectangle = new Rectangle();
+            BananaRectangle.Fill = s_Banana;
+            BananaRectangle.Height = 128;
+            BananaRectangle.Width = 64;
+            canvas.Children.Add(BananaRectangle);
+            box = new Rect(point, new Size(64, 128));
             int rOthernumber = r.Next();
 
 
@@ -67,8 +67,8 @@ namespace u5_Culminating
             Movement();
             Velocity = Velocity + 2;
 
-            Canvas.SetTop(AppleRectangle, point.Y);
-            Canvas.SetLeft(AppleRectangle, point.X);
+            Canvas.SetTop(BananaRectangle, point.Y);
+            Canvas.SetLeft(BananaRectangle, point.X);
             box.X = point.X;
             box.Y = point.Y;
         }
@@ -107,8 +107,8 @@ namespace u5_Culminating
 
         public void destroy()
         {
-            canvas.Children.Remove(AppleRectangle);
-         
+            canvas.Children.Remove(BananaRectangle);
+
 
         }
 

@@ -8,17 +8,18 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Drawing;
 
 namespace u5_Culminating
 {
-    class f_AppleSlice
+    class f_WatermelonSlice
     {
         //Generate Player Variables
-        Point AppleSlicePos = new Point();
+        Point WatermelonSlicePos = new Point();
         public Point point;
         Canvas canvas;
         MainWindow window;
-        Rectangle AppleSliceRectangle;
+        Rectangle WatermelonSliceRectangle;
         Random r = new Random(5);
         Random rnum = new Random();
         string movement;
@@ -26,22 +27,22 @@ namespace u5_Culminating
 
 
         //Create Sprites
-        ImageBrush s_AppleSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice.png", UriKind.Relative)));
-        ImageBrush s_AppleSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\AppleSlice2.png", UriKind.Relative)));
+        ImageBrush s_WatermelonSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\WatermelonSlice.png", UriKind.Relative)));
+        ImageBrush s_WatermelonSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\WatermelonSlice2.png", UriKind.Relative)));
 
-        public f_AppleSlice(Canvas c, MainWindow w)
+        public f_WatermelonSlice(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
 
 
-            AppleSlicePos = point;
-            AppleSliceRectangle = new Rectangle();
-            AppleSliceRectangle.Fill = s_AppleSlice;
-            AppleSliceRectangle.Height = 64;
-            AppleSliceRectangle.Width = 64;
-            canvas.Children.Add(AppleSliceRectangle);
+            WatermelonSlicePos = point;
+            WatermelonSliceRectangle = new Rectangle();
+            WatermelonSliceRectangle.Fill = s_WatermelonSlice;
+            WatermelonSliceRectangle.Height = 64;
+            WatermelonSliceRectangle.Width = 64;
+            canvas.Children.Add(WatermelonSliceRectangle);
             int rOthernumber = r.Next();
 
             if (point.X < 300)
@@ -65,12 +66,13 @@ namespace u5_Culminating
         {
             Movement();
 
-            Canvas.SetTop(AppleSliceRectangle, point.Y);
-            Canvas.SetLeft(AppleSliceRectangle, point.X);
+            Canvas.SetTop(WatermelonSliceRectangle, point.Y);
+            Canvas.SetLeft(WatermelonSliceRectangle, point.X);
 
             if (rotation == 180)
             {
-                AppleSliceRectangle.Fill = s_AppleSlice2;
+                WatermelonSliceRectangle.Fill = s_WatermelonSlice2;
+                
             }
 
         }
@@ -82,7 +84,6 @@ namespace u5_Culminating
         private void Movement()
         {
             point.Y = point.Y + 10;
-
             if (rotation == 0)
             {
                 if (movement == "left")
@@ -105,8 +106,6 @@ namespace u5_Culminating
                     point.X = point.X + (Util.SliceFall() * 2);
                 }
             }
-
-
         }
 
 
@@ -114,7 +113,7 @@ namespace u5_Culminating
 
         public void destroy()
         {
-            canvas.Children.Remove(AppleSliceRectangle);
+            canvas.Children.Remove(WatermelonSliceRectangle);
         }
 
     }

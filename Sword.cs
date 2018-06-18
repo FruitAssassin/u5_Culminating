@@ -43,7 +43,7 @@ namespace u5_Culminating
             canvas.Children.Add(SwordRectangle);
             Canvas.SetTop(SwordRectangle, Globals.p_mouse.Y - 30);
             Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X - 60);
-            box = new Rect(point, new Size(64, 64));
+            box = new Rect(point, new Size(128, 64));
             int rOthernumber = r.Next();
 
         }
@@ -51,7 +51,11 @@ namespace u5_Culminating
         public void Tick()
         {
             Movement();
-            box.X = Globals.p_mouse.X;
+            if (Mouse.LeftButton.Equals(MouseButtonState.Pressed))
+            {
+                box.X = Globals.p_mouse.X -60;
+                box.Y = Globals.p_mouse.Y -30;
+            }
 
         }
 
@@ -60,6 +64,8 @@ namespace u5_Culminating
             if (!(Mouse.LeftButton.Equals(MouseButtonState.Pressed)))
             {
                 SwordRectangle.Visibility = Visibility.Hidden;
+                box.X = 900;
+                box.Y = 1000;
             }
             if (Mouse.LeftButton.Equals(MouseButtonState.Pressed))
             {
@@ -68,7 +74,7 @@ namespace u5_Culminating
                 Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X - 60);
                 SwordRectangle.Visibility = Visibility.Visible;
             }
-            
+
         }
 
     }
