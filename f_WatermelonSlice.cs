@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +32,7 @@ namespace u5_Culminating
 
         public f_WatermelonSlice(Canvas c, MainWindow w)
         {
-            //Generate Alien
+            //Generate Fruit
             canvas = c;
             window = w;
 
@@ -61,7 +61,7 @@ namespace u5_Culminating
 
 
 
-
+        //Controls Movement and Updates Points
         public void Tick()
         {
             Movement();
@@ -72,7 +72,7 @@ namespace u5_Culminating
             if (rotation == 180)
             {
                 WatermelonSliceRectangle.Fill = s_WatermelonSlice2;
-                
+
             }
 
         }
