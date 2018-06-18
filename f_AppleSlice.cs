@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,11 +31,11 @@ namespace u5_Culminating
 
         public f_AppleSlice(Canvas c, MainWindow w)
         {
-            //Generate Alien
+            //Generate Apple
             canvas = c;
             window = w;
 
-
+            //Set properties
             AppleSlicePos = point;
             AppleSliceRectangle = new Rectangle();
             AppleSliceRectangle.Fill = s_AppleSlice;
@@ -43,7 +43,7 @@ namespace u5_Culminating
             AppleSliceRectangle.Width = 64;
             canvas.Children.Add(AppleSliceRectangle);
             int rOthernumber = r.Next();
-
+            //set borders
             if (point.X < 300)
             {
                 movement = "left";
@@ -60,14 +60,14 @@ namespace u5_Culminating
 
 
 
-
+        //Checks points
         public void Tick()
         {
             Movement();
 
             Canvas.SetTop(AppleSliceRectangle, point.Y);
             Canvas.SetLeft(AppleSliceRectangle, point.X);
-
+            //Replace apple will slice
             if (rotation == 180)
             {
                 AppleSliceRectangle.Fill = s_AppleSlice2;
@@ -78,13 +78,14 @@ namespace u5_Culminating
 
 
 
-
+        //Apple movement in parabla motion
         private void Movement()
         {
             point.Y = point.Y + 10;
 
             if (rotation == 0)
             {
+                //Slices move slower
                 if (movement == "left")
                 {
                     point.X = point.X + (Util.SliceFall() * 2);
@@ -111,7 +112,7 @@ namespace u5_Culminating
 
 
 
-
+        //Remove apple
         public void destroy()
         {
             canvas.Children.Remove(AppleSliceRectangle);
