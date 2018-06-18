@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,14 +30,16 @@ namespace u5_Culminating
 
         public f_Banana(Canvas c, MainWindow w)
         {
-            //Generate Alien
+            //Generate Banana
             canvas = c;
             window = w;
 
+            //Create sprite
             ImageBrush s_Banana = new ImageBrush(new BitmapImage(new Uri(@"Images\Banana.png", UriKind.Relative)));
-
+            //Set properties
             point.Y = 690;
             point.X = 150 + x_random.Next(0, 251);
+            //Borders
             if (point.X < 300)
             {
                 movement = "left";
@@ -61,12 +63,14 @@ namespace u5_Culminating
 
 
 
-
+        //Check Points
         public void Tick()
         {
+            //Movment speed
             Movement();
             Velocity = Velocity + 2;
 
+            //Updates hitbox
             Canvas.SetTop(BananaRectangle, point.Y);
             Canvas.SetLeft(BananaRectangle, point.X);
             box.X = point.X;
@@ -76,7 +80,7 @@ namespace u5_Culminating
 
 
 
-
+        //Moves Sprite
         private void Movement()
         {
             point.Y = point.Y + (Velocity);
@@ -91,7 +95,7 @@ namespace u5_Culminating
 
         }
 
-
+        //Hit Registration
         public bool collidesWith(Sword sword)
         {
             if (this.boundingBox.X > (sword.boundingBox.X) && this.boundingBox.X < (sword.boundingBox.X + 128)
@@ -105,6 +109,7 @@ namespace u5_Culminating
             }
         }
 
+        //Destroys Banana
         public void destroy()
         {
             canvas.Children.Remove(BananaRectangle);
