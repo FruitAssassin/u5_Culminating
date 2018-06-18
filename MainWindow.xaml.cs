@@ -128,35 +128,26 @@ namespace u5_Culminating
 
         private void MusicEvents()
         {
-            if (gameState == GameState.MainMenu)
-            {
+            
+            
                 if (Globals.musicPlaying == false)
                 {
                     Globals.musicPlayer.Stop();
-                    Uri music = new Uri("mainmenu.wav", UriKind.Relative);
+                    Uri music = new Uri(@"Sounds\mainmenu.wav", UriKind.Relative);
                     Globals.musicPlayer.SoundLocation = music.ToString();
                     Globals.musicPlayer.PlayLooping();
 
                     Globals.musicPlaying = true;
                 }
-            }
-            else if (gameState == GameState.GameOn)
-            {
-                if (Globals.musicPlaying == false)
-                {
-                    Globals.musicPlayer.Stop();
-                    Uri music = new Uri("playgame.wav", UriKind.Relative);
-                    Globals.musicPlayer.SoundLocation = music.ToString();
-                    Globals.musicPlayer.PlayLooping();
-
-                    Globals.musicPlaying = true;
-                }
-            }
+            
+   
         }
 
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            //plays music specific to gamestates
+            MusicEvents();
             if (gameState == GameState.GameOn)
             {
 
@@ -223,7 +214,7 @@ namespace u5_Culminating
             {
                 int fruitkind = Util.GetRandomFruitKind();
 
-                if(fruitkind == 4)
+                if (fruitkind == 4)
                 {
                     f_Apple apple = new f_Apple(canvas_battleground, this);
                     applelist.Add(apple);
@@ -356,7 +347,7 @@ namespace u5_Culminating
 
         public void RemoveInstances()
         {
-            foreach(f_Apple a in appletodestroy)
+            foreach (f_Apple a in appletodestroy)
             {
                 applelist.Remove(a);
             }
