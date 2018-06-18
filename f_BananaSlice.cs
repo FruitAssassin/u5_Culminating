@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +44,7 @@ namespace u5_Culminating
             canvas.Children.Add(BananaSliceRectangle);
             int rOthernumber = r.Next();
 
+            //Slices come in from right or left depending on X point
             if (point.X < 300)
             {
                 movement = "left";
@@ -60,7 +61,7 @@ namespace u5_Culminating
 
 
 
-
+        //Controls movement and Updates points
         public void Tick()
         {
             Movement();
@@ -78,7 +79,7 @@ namespace u5_Culminating
 
 
 
-
+        //Moves both slices
         private void Movement()
         {
             point.Y = point.Y + 10;
@@ -111,7 +112,7 @@ namespace u5_Culminating
 
 
 
-
+        //Destroys slices
         public void destroy()
         {
             canvas.Children.Remove(BananaSliceRectangle);
