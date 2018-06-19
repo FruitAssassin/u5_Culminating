@@ -1,3 +1,2 @@
 # u5_Culminating
-Coding Legends
-I sway like leaves in the wind.
+Fruit Assasian! (We know it's spelt wrong)
