@@ -10,8 +10,6 @@
 
     <Grid x:Name="grid_pageController" Visibility="Visible">
         <Canvas x:Name="canvas_mainmenu" Visibility="Hidden" Background="Black">
-            <Button Click="Click_Play" Content="Play" Width="100" Height="30" FontSize="20" Canvas.Left="286" Canvas.Top="136" RenderTransformOrigin="0.48,-0.25"/>
-            <Button Click="Click_Settings"  Content="Settings" Width="100" Height="30" FontSize="20" Canvas.Left="286" Canvas.Top="171" RenderTransformOrigin="0.48,-0.25"/>
         </Canvas>
 
         <Canvas x:Name="canvas_battleground" Visibility="Hidden">
@@ -21,12 +19,8 @@
         </Canvas>
 
         <Canvas x:Name="canvas_settings" Visibility="Hidden">
-            <Button x:Name="btn_Bac" Click="Click_Back" Content="Back" Canvas.Left="10" Canvas.Top="619" Width="90"/>
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                <TextBlock Text="Difficulty:" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
             </StackPanel>
         </Canvas>
     </Grid>

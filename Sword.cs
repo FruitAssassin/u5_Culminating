@@ -53,8 +53,8 @@ namespace u5_Culminating
             Movement();
             if (Mouse.LeftButton.Equals(MouseButtonState.Pressed))
             {
-                box.X = Globals.p_mouse.X -60;
-                box.Y = Globals.p_mouse.Y -30;
+                box.X = Globals.p_mouse.X - 60;
+                box.Y = Globals.p_mouse.Y - 30;
             }
 
         }
@@ -74,6 +74,12 @@ namespace u5_Culminating
                 Canvas.SetLeft(SwordRectangle, Globals.p_mouse.X - 60);
                 SwordRectangle.Visibility = Visibility.Visible;
             }
+
+        }
+        public void destroy()
+        {
+            canvas.Children.Remove(SwordRectangle);
+
 
         }
 

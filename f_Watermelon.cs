@@ -94,8 +94,8 @@ namespace u5_Culminating
 
         public bool collidesWith(Sword sword)
         {
-            if (this.boundingBox.X > (sword.boundingBox.X) && this.boundingBox.X < (sword.boundingBox.X + 128)
-                && this.boundingBox.Y < (sword.boundingBox.Y + 128) && this.boundingBox.Y > sword.boundingBox.Y)
+            if (this.boundingBox.X > (sword.boundingBox.X - 64) && this.boundingBox.X < (sword.boundingBox.X + 112)
+                && this.boundingBox.Y < (sword.boundingBox.Y + 32) && this.boundingBox.Y > sword.boundingBox.Y - 32)
             {
                 return true;
             }

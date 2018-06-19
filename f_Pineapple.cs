@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +30,7 @@ namespace u5_Culminating
 
         public f_Pineapple(Canvas c, MainWindow w)
         {
-            //Generate Pineapple
+            //Generate Alien
             canvas = c;
             window = w;
 
@@ -61,7 +61,7 @@ namespace u5_Culminating
 
 
 
-        //Controls Movement and Updates Points
+
         public void Tick()
         {
             Movement();
@@ -76,7 +76,7 @@ namespace u5_Culminating
 
 
 
-        //Moves image
+
         private void Movement()
         {
             point.Y = point.Y + (Velocity);
@@ -91,11 +91,11 @@ namespace u5_Culminating
 
         }
 
-        //Hitbox Registration
+
         public bool collidesWith(Sword sword)
         {
-            if (this.boundingBox.X > (sword.boundingBox.X) && this.boundingBox.X < (sword.boundingBox.X + 128)
-                && this.boundingBox.Y < (sword.boundingBox.Y + 128) && this.boundingBox.Y > sword.boundingBox.Y)
+            if (this.boundingBox.X > (sword.boundingBox.X - 32) && this.boundingBox.X < (sword.boundingBox.X + 80)
+                && this.boundingBox.Y < (sword.boundingBox.Y + 64) && this.boundingBox.Y > sword.boundingBox.Y - 64)
             {
                 return true;
             }
@@ -105,7 +105,6 @@ namespace u5_Culminating
             }
         }
 
-        //Destroys Pineapple
         public void destroy()
         {
             canvas.Children.Remove(PineappleRectangle);

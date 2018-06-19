@@ -12,15 +12,15 @@ using System.Collections;
 
 namespace u5_Culminating
 {
-    class f_Banana
+    class Bomb
     {
         //Generate Player Variables
-        Point BananaPos = new Point();
+        Point BombPos = new Point();
         private Point point;
         public Point Point { get => point; }
         Canvas canvas;
         MainWindow window;
-        Rectangle BananaRectangle;
+        Rectangle BombRectangle;
         public Rect boundingBox { get => box; }
         Rect box;
         Random r = new Random(5);
@@ -28,13 +28,13 @@ namespace u5_Culminating
         int Velocity = -40 - Util.FruitVelocity();
         string movement;
 
-        public f_Banana(Canvas c, MainWindow w)
+        public Bomb(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
 
-            ImageBrush s_Banana = new ImageBrush(new BitmapImage(new Uri(@"Images\Banana.png", UriKind.Relative)));
+            ImageBrush s_Bomb = new ImageBrush(new BitmapImage(new Uri(@"Images\Bomb.png", UriKind.Relative)));
 
             point.Y = 690;
             point.X = 150 + x_random.Next(0, 251);
@@ -46,12 +46,12 @@ namespace u5_Culminating
             {
                 movement = "right";
             }
-            BananaPos = point;
-            BananaRectangle = new Rectangle();
-            BananaRectangle.Fill = s_Banana;
-            BananaRectangle.Height = 64;
-            BananaRectangle.Width = 64;
-            canvas.Children.Add(BananaRectangle);
+            BombPos = point;
+            BombRectangle = new Rectangle();
+            BombRectangle.Fill = s_Bomb;
+            BombRectangle.Height = 64;
+            BombRectangle.Width = 64;
+            canvas.Children.Add(BombRectangle);
             box = new Rect(point, new Size(64, 64));
             int rOthernumber = r.Next();
 
@@ -67,8 +67,8 @@ namespace u5_Culminating
             Movement();
             Velocity = Velocity + 2;
 
-            Canvas.SetTop(BananaRectangle, point.Y);
-            Canvas.SetLeft(BananaRectangle, point.X);
+            Canvas.SetTop(BombRectangle, point.Y);
+            Canvas.SetLeft(BombRectangle, point.X);
             box.X = point.X;
             box.Y = point.Y;
         }
@@ -107,7 +107,7 @@ namespace u5_Culminating
 
         public void destroy()
         {
-            canvas.Children.Remove(BananaRectangle);
+            canvas.Children.Remove(BombRectangle);
 
 
         }

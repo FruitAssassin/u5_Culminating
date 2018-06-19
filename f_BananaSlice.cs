@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,8 +26,8 @@ namespace u5_Culminating
 
 
         //Create Sprites
-        ImageBrush s_BananaSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\PineappleSlice.png", UriKind.Relative)));
-        ImageBrush s_BananaSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\PineappleSlice2.png", UriKind.Relative)));
+        ImageBrush s_BananaSlice = new ImageBrush(new BitmapImage(new Uri(@"Images\BananaSlice.png", UriKind.Relative)));
+        ImageBrush s_BananaSlice2 = new ImageBrush(new BitmapImage(new Uri(@"Images\BananaSlice2.png", UriKind.Relative)));
 
         public f_BananaSlice(Canvas c, MainWindow w)
         {
@@ -39,12 +39,11 @@ namespace u5_Culminating
             BananaSlicePos = point;
             BananaSliceRectangle = new Rectangle();
             BananaSliceRectangle.Fill = s_BananaSlice;
-            BananaSliceRectangle.Height = 128;
+            BananaSliceRectangle.Height = 64;
             BananaSliceRectangle.Width = 64;
             canvas.Children.Add(BananaSliceRectangle);
             int rOthernumber = r.Next();
 
-            //Slices come in from right or left depending on X point
             if (point.X < 300)
             {
                 movement = "left";
@@ -61,7 +60,7 @@ namespace u5_Culminating
 
 
 
-        //Controls movement and Updates points
+
         public void Tick()
         {
             Movement();
@@ -79,7 +78,7 @@ namespace u5_Culminating
 
 
 
-        //Moves both slices
+
         private void Movement()
         {
             point.Y = point.Y + 10;
@@ -88,22 +87,22 @@ namespace u5_Culminating
             {
                 if (movement == "left")
                 {
-                    point.X = point.X - (Util.SliceFall() * 2);
+                    point.X = point.X + (Util.SliceFall() * 2);
                 }
                 else if (movement == "right")
                 {
-                    point.X = point.X + (Util.SliceFall() * 2);
+                    point.X = point.X - (Util.SliceFall() * 2);
                 }
             }
             else if (rotation == 180)
             {
                 if (movement == "left")
                 {
-                    point.X = point.X + (Util.SliceFall() * 2);
+                    point.X = point.X - (Util.SliceFall() * 2);
                 }
                 else if (movement == "right")
                 {
-                    point.X = point.X - (Util.SliceFall() * 2);
+                    point.X = point.X + (Util.SliceFall() * 2);
                 }
             }
 
@@ -112,7 +111,7 @@ namespace u5_Culminating
 
 
 
-        //Destroys slices
+
         public void destroy()
         {
             canvas.Children.Remove(BananaSliceRectangle);
