@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ *Josh Degazio - Ian Markham - Bradley Miller - Kyler Campbell
+ *June 19, 2018
+ *Fruit Assasian
+ *User becomes an assassin in order to stop the overpopulation of fruit.
+*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,16 +26,27 @@ using System.Windows.Shapes;
 
 namespace u5_Culminating
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
-
+    // *CREDITS*
+    //
+    // *Songs*
+    // Sentoki (Prod. Raven)
+    // This track can be found on YouTube, with the description stating "ADD "(Prod. By Raven)" IF YOU WANT TO USE THIS BEAT."
+    // The track can be found at the following URL: https://www.youtube.com/watch?v=pdRm1taxorE&feature=youtu.be
+    //
+    // Uchitagana - Iruka
+    // This song can be found on YouTube, with "No Copyright" in the title.
+    // The song can be found at the following URL: https://www.youtube.com/watch?v=7XOsHz8b2Tg&feature=youtu.be
+    //
+    // Tokyo - RikeLuxxBeats
+    // "Want to use this track? You must put this in your video description:
+    // Prod By RikeLuxxBeats
+    // Link: https://youtu.be/S2IYCZnhHcg
+    // © Rike Luxx Beats - all rights reserved" - YouTube description
 
 
     public enum GameState { MainMenu, GameOn, GameOver, Settings }
 
-
+    //Global Variable Class
     public static class Globals
     {
         //Booleans
@@ -61,7 +78,7 @@ namespace u5_Culminating
 
         //Strings
         public static string str_Difficulty = "Easy";
-        public static string str_Song = "Sensoki";
+        public static string str_Song = "Sentoki";
         public static string first_p_name = "name";
         public static string first_p_stats = "Score: " + first_p_score.ToString() + "   Combo: " + first_p_combo.ToString() + "\nDifficulty: " + first_p_difficulty;
         public static string second_p_name = "name";
@@ -100,7 +117,7 @@ namespace u5_Culminating
 
     }
 
-
+    //Utility class used for calling randoms, making them more random.
     public static class Util
     {
         //Creates a random integer
@@ -123,16 +140,18 @@ namespace u5_Culminating
         }
     }
 
+    //MainWindow Class
     public partial class MainWindow : Window
     {
+        //Timers
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
         System.Windows.Threading.DispatcherTimer comboTimer = new System.Windows.Threading.DispatcherTimer();
         Sword player;
 
-
+        //Set gamestate instance
         public GameState gameState;
 
-
+        //Create objects
         Button btn_Play = new Button();
         Button btn_Settings = new Button();
         TextBlock txt_Begin = new TextBlock();
@@ -161,7 +180,7 @@ namespace u5_Culminating
         Button leave_Leaderboard = new Button();
         Rectangle darkenLeaderboard = new Rectangle();
 
-
+        //Create lists
         List<f_Apple> applelist = new List<f_Apple>();
         List<f_Watermelon> watermelonlist = new List<f_Watermelon>();
         List<f_Pineapple> pineapplelist = new List<f_Pineapple>();
@@ -186,15 +205,20 @@ namespace u5_Culminating
         List<f_PineappleSlice> pineappleslicetodestroy = new List<f_PineappleSlice>();
         List<f_BananaSlice> bananaslicetodestroy = new List<f_BananaSlice>();
 
+        //Mainwindow method
         public MainWindow()
         {
+            //start program
             InitializeComponent();
+            //set title
             this.Title = "Fruit Assasian";
 
+            //begin timer
             gameTimer.Tick += gameTimer_Tick;
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
 
+            //begin second timer
             comboTimer.Tick += comboTimer_Tick;
             comboTimer.Interval = new TimeSpan(0, 0, 0, 3);//combotimer
             comboTimer.Start();
@@ -206,7 +230,7 @@ namespace u5_Culminating
             }
             Uri stats = new Uri(Globals.path + @"\Stats.txt");
 
-
+            //Create the main menu
             CreateMainmenu();
 
             //Reads stats method
@@ -219,38 +243,50 @@ namespace u5_Culminating
 
         }
 
+        //Create the main menu
         private void CreateMainmenu()
         {
+            //set backgrounds
             canvas_mainmenu.Background = Globals.MMBackground;
             canvas_battleground.Background = Globals.RBackground;
+            
+            //set visibilty and gamestates
             canvas_mainmenu.Visibility = Visibility.Visible;
             gameState = GameState.MainMenu;
+
+            //Allows to use p_mouse as a reference to the mouse cursor
             Globals.p_mouse = Mouse.GetPosition(this);
             Console.WriteLine(Mouse.GetPosition(this));
 
+            //Add objects to canvas
             canvas_mainmenu.Children.Add(btn_Play);
             canvas_mainmenu.Children.Add(btn_Settings);
+
+            //Add properties to objects
             btn_Play.Click += new RoutedEventHandler(Click_Play); btn_Play.Content = "Play!"; btn_Play.Width = 100; btn_Play.Height = 35; btn_Play.FontSize = 20; Canvas.SetTop(btn_Play, 136); Canvas.SetLeft(btn_Play, 286);
             btn_Settings.Click += new RoutedEventHandler(Click_Settings); btn_Settings.Content = "Settings"; btn_Settings.Width = 100; btn_Settings.Height = 35; btn_Settings.FontSize = 20; Canvas.SetTop(btn_Settings, 176); Canvas.SetLeft(btn_Settings, 286);
 
+            //Ensures that mainmenu doesn't get created twice
             Globals.isMainMenuCreated = true;
         }
 
+        //Method for music
         private void MusicEvents()
         {
-
-            if (Globals.str_Song == "Sensoki")
+            //If the song thats supposed to be playing is Sentoki, play it on loop
+            if (Globals.str_Song == "Sentoki")
             {
                 if (Globals.musicPlaying == false)
                 {
                     Globals.musicPlayer.Stop();
-                    Uri music = new Uri(@"Sounds\Sensoki.wav", UriKind.Relative);
+                    Uri music = new Uri(@"Sounds\Sentoki.wav", UriKind.Relative);
                     Globals.musicPlayer.SoundLocation = music.ToString();
                     Globals.musicPlayer.PlayLooping();
 
                     Globals.musicPlaying = true;
                 }
             }
+            //If the song thats supposed to be playing is Tokyo, play it on loop
             else if (Globals.str_Song == "Tokyo")
             {
                 if (Globals.musicPlaying == false)
@@ -263,6 +299,7 @@ namespace u5_Culminating
                     Globals.musicPlaying = true;
                 }
             }
+            //If the song thats supposed to be playing is Uchigatana, play it on loop
             else if (Globals.str_Song == "Uchigatana")
             {
                 if (Globals.musicPlaying == false)
@@ -279,11 +316,17 @@ namespace u5_Culminating
 
         }
 
+        //Controls gametimer
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            if(gameState == GameState.MainMenu)
+            //plays music specific to gamestates
+            MusicEvents();
+
+            if (gameState == GameState.MainMenu)
             {
+                //set title
                 this.Title = "Fruit Assasian V0.9 - Current Top Player: " + Globals.first_p_name + ", Score: " + Globals.first_p_score;
+                //create menu
                 if (Globals.isMainMenuCreated == false)
                 {
                     CreateMainmenu();
@@ -303,12 +346,12 @@ namespace u5_Culminating
 
             }
 
-            //plays music specific to gamestates
-            MusicEvents();
-            if (gameState == GameState.GameOn)
+            else if (gameState == GameState.GameOn)
             {
+                //Creates title
                 this.Title = "Fruit Assasian V0.9 - Current Top Player: " + Globals.first_p_name + ", Score: " + Globals.first_p_score;
 
+                //Runs methods
                 HUD();
                 CreateFruits();
                 CheckCollision();
@@ -317,10 +360,9 @@ namespace u5_Culminating
 
             }
 
-
-
             else if (gameState == GameState.Settings)
             {
+                //Change difficulty based upon what is displayed in the difficulty drop down box.
                 if (CB_Difficulty.Text == "Easy")
                 {
                     Globals.int_Difficulty = 1;
@@ -338,7 +380,6 @@ namespace u5_Culminating
                 }
             }
 
-            //end game tick events
             else if (gameState == GameState.GameOver)
             {
                 //Clear previous canvas
@@ -372,54 +413,68 @@ namespace u5_Culminating
             }
         }
 
+        //Controls HUD
         private void HUD()
         {
+            //If the HUD hasn't been created, create it.
             if (Globals.isHUDCreated == false)
             {
+                //Adds objects to canvas
                 canvas_battleground.Children.Add(txt_Lives);
                 canvas_battleground.Children.Add(txt_Score);
                 canvas_battleground.Children.Add(txt_Combo);
 
-
+                //Sets properties
                 txt_Lives.FontSize = 18;
                 txt_Lives.FontWeight = FontWeights.Bold;
                 txt_Lives.Foreground = Brushes.White;
                 Canvas.SetLeft(txt_Lives, 5);
 
+                //Sets properties
                 txt_Score.FontSize = 18;
                 txt_Score.FontWeight = FontWeights.Bold;
                 txt_Score.Foreground = Brushes.White;
                 Canvas.SetLeft(txt_Score, 5);
                 Canvas.SetTop(txt_Score, 25);
 
+                //Sets properties
                 txt_Combo.FontSize = 18;
                 txt_Combo.FontWeight = FontWeights.Bold;
                 txt_Combo.Foreground = Brushes.White;
                 Canvas.SetLeft(txt_Combo, 5);
                 Canvas.SetTop(txt_Combo, 50);
 
+                //Disallows re-entry
                 Globals.isHUDCreated = true;
             }
 
+            //Set HUD variables
             txt_Lives.Text = "Lives: " + Globals.p_lives;
             txt_Score.Text = "Score: " + Globals.p_score;
             txt_Combo.Text = "Combo: " + Globals.p_combo;
         }
 
+        //Controls combo mechanic
         private void comboTimer_Tick(object sender, EventArgs e)
         {
+            //If your new combo is better than your old combo, replace it.
             if (Globals.p_combo > Globals.p_bestcombo)
             {
                 Globals.p_bestcombo = Globals.p_combo;
             }
 
+            //Reset combo
             Globals.p_combo = 0;
+
+            //Reset combo timer
             comboTimer.Stop();
             comboTimer.Start();
         }
 
+        //Control all existing instances
         private void InstancesTick()
         {
+            //For every instance that exists, run the tick method
             foreach (f_Apple a in applelist)
             {
                 a.Tick();
@@ -462,18 +517,24 @@ namespace u5_Culminating
             }
         }
 
+        //Controls how fruits are created, and when.
         public void CreateFruits()
         {
+            //Set an integer to be equal to the number that was randomly generated
             int chance = Util.ChanceForFruit();
 
+            //If the number that was generated is 10, run generate fruit
             if (chance == 10)
             {
+                //Decides what kind of fruit to generate
                 int fruitkind = Util.GetRandomFruitKind();
 
+                //Create bomb
                 if (fruitkind == 1)
                 {
                     if (Globals.int_Difficulty == 1)
                     {
+                        // On easy, there is a 50% chance to skip the creation of bombs.
                         int.TryParse(Util.FruitVelocity().ToString(), out int x);
                         if (x > 2)
                         {
@@ -487,11 +548,15 @@ namespace u5_Culminating
                         bomblist.Add(bomba);
                     }
                 }
-                if (fruitkind == 2)
+                
+                //Create apple
+                else if (fruitkind == 2)
                 {
                     f_Apple apple = new f_Apple(canvas_battleground, this);
                     applelist.Add(apple);
                 }
+
+                //Create watermelon, unless on hard, then create bomb.
                 else if (fruitkind == 5)
                 {
                     if (Globals.int_Difficulty == 3)
@@ -505,11 +570,15 @@ namespace u5_Culminating
                         watermelonlist.Add(watermelon);
                     }
                 }
+
+                //Create pineapple
                 else if (fruitkind == 4)
                 {
                     f_Pineapple pineapple = new f_Pineapple(canvas_battleground, this);
                     pineapplelist.Add(pineapple);
                 }
+
+                //Create banana
                 else if (fruitkind == 3)
                 {
                     f_Banana banana = new f_Banana(canvas_battleground, this);
@@ -518,13 +587,18 @@ namespace u5_Culminating
             }
         }
 
+        //Checks if a collision has occured.
         public void CheckCollision()
         {
+            //Checks if any apples that exist have collided with a sword.
             foreach (f_Apple a in applelist)
             {
+                //If apple is out of bounds
                 if (a.Point.Y > 691)
                 {
+                    //Remove apple visuals
                     a.destroy();
+                    //Removes apple code
                     appletodestroy.Add(a);
                 }
                 foreach (Sword s in swordlist)
@@ -534,11 +608,13 @@ namespace u5_Culminating
                         a.destroy();
                         appletodestroy.Add(a);
 
+                        //Set variables
                         Globals.p_score = Globals.p_score + ((3 * Globals.int_Difficulty) * (1 + (Globals.p_combo/25)));
                         Globals.p_combo++;
                         comboTimer.Stop();
                         comboTimer.Start();
 
+                        //Create two apple slices.
                         f_AppleSlice appleSlice = new f_AppleSlice(canvas_battleground, this);
                         appleslicelist.Add(appleSlice);
                         appleSlice.point = a.Point;
@@ -717,8 +793,10 @@ namespace u5_Culminating
             }
         }
 
+        //Removes instances if told to do so.
         public void RemoveInstances()
         {
+            //For every instance on the destroy list, remove it from the original list it was on.
             foreach (f_Apple a in appletodestroy)
             {
                 applelist.Remove(a);
@@ -761,43 +839,58 @@ namespace u5_Culminating
             }
         }
 
+        //Controls what happens when "Play" is clicked
         public void Click_Play(object sender, RoutedEventArgs e)
         {
-
+            //If player is at main menu
             if (gameState == GameState.MainMenu)
             {
+                //Set visibilties
                 canvas_mainmenu.Visibility = Visibility.Hidden;
                 canvas_battleground.Visibility = Visibility.Visible;
+
+                //Create a single apple to prepare player for impending doom.
                 f_Apple apple = new f_Apple(canvas_battleground, this);
                 applelist.Add(apple);
 
+                //Create sword instance
                 Sword player = new Sword(canvas_battleground, this);
                 swordlist.Add(player);
             }
 
+            //Tell the console what difficulty you're on, so you're FBI agent gets embarassed.
             Console.WriteLine(Globals.int_Difficulty);
             Console.WriteLine(Globals.str_Difficulty);
+
+            //Starts game
             gameState = GameState.GameOn;
         }
 
+        //Controls what happens when "Settings" is clicked
         public void Click_Settings(object sender, RoutedEventArgs e)
         {
+            //Canvas controlling
             canvas_settings.Children.Clear();
             canvas_settings.Background = Globals.RBackground;
 
+            //Method for creating objects
             CreateSettings();
 
+            //Visibility
             if (gameState == GameState.MainMenu)
             {
                 canvas_mainmenu.Visibility = Visibility.Hidden;
                 canvas_settings.Visibility = Visibility.Visible;
             }
 
+            //Change gamestate
             gameState = GameState.Settings;
         }
 
+        //Creates settings page objects
         private void CreateSettings()
         {
+            //Properties
             txt_Difficulty.Text = "Difficulty:";
             txt_Difficulty.FontSize = 24;
             txt_Difficulty.FontWeight = FontWeights.Bold;
@@ -805,6 +898,7 @@ namespace u5_Culminating
             canvas_settings.Children.Add(txt_Difficulty);
             Canvas.SetLeft(txt_Difficulty, 5);
 
+            //Properties
             btn_Back.Content = "Back";
             btn_Back.Width = 90;
             Canvas.SetLeft(btn_Back, 5);
@@ -812,6 +906,7 @@ namespace u5_Culminating
             btn_Back.Click += new RoutedEventHandler(Click_Back);
             canvas_settings.Children.Add(btn_Back);
 
+            //More properties
             CB_Difficulty.Items.Clear();
             CB_Difficulty.Width = 100;
             CB_Difficulty.SelectedItem = Globals.str_Difficulty;
@@ -822,7 +917,7 @@ namespace u5_Culminating
             Canvas.SetTop(CB_Difficulty, 35);
             Canvas.SetLeft(CB_Difficulty, 5);
 
-
+            //A few properties
             txt_Song.Text = "Song:";
             txt_Song.FontSize = 24;
             txt_Song.FontWeight = FontWeights.Bold;
@@ -831,10 +926,11 @@ namespace u5_Culminating
             Canvas.SetLeft(txt_Song, 5);
             Canvas.SetTop(txt_Song, 70);
 
+            //I think these are also properties
             CB_Song.Items.Clear();
             CB_Song.Width = 100;
             CB_Song.SelectedItem = Globals.str_Song;
-            CB_Song.Items.Add("Sensoki");
+            CB_Song.Items.Add("Sentoki");
             CB_Song.Items.Add("Uchigatana");
             CB_Song.Items.Add("Tokyo");
             canvas_settings.Children.Add(CB_Song);
@@ -842,20 +938,23 @@ namespace u5_Culminating
             Canvas.SetLeft(CB_Song, 5);
         }
 
+        //Controls what happens when "Back" is clicked
         public void Click_Back(object sender, RoutedEventArgs e)
         {
             if (gameState == GameState.Settings)
             {
+                //Set visibilities
                 canvas_mainmenu.Visibility = Visibility.Visible;
                 canvas_settings.Visibility = Visibility.Hidden;
 
+                //Figure out what song should be playing
                 if (CB_Song.Text != Globals.str_Song)
                 {
                     Globals.musicPlaying = false;
 
-                    if (CB_Song.Text == "Sensoki")
+                    if (CB_Song.Text == "Sentoki")
                     {
-                        Globals.str_Song = "Sensoki";
+                        Globals.str_Song = "Sentoki";
                     }
                     else if (CB_Song.Text == "Uchigatana")
                     {
@@ -865,11 +964,9 @@ namespace u5_Culminating
                     {
                         Globals.str_Song = "Tokyo";
                     }
-                    else if (CB_Song.Text == "Sakura")
-                    {
-                        Globals.str_Song = "Sakura";
-                    }
                 }
+
+                //Tell your FBI agent what song is playing in case they aren't wearing earbuds
                 Console.WriteLine("Currently Playing: " + Globals.str_Song);
 
 
@@ -886,8 +983,10 @@ namespace u5_Culminating
             //Adds objects
             if (Globals.areStatsEntered == false)
             {
+                //More methods!!
                 UpdateLeaderboard();
 
+                //Add objects
                 canvas_leaderboard.Children.Add(darkenLeaderboard);
                 canvas_leaderboard.Children.Add(leaderboard);
                 canvas_leaderboard.Children.Add(txt_name);
