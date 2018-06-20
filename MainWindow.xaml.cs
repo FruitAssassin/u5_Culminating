@@ -37,38 +37,50 @@ namespace u5_Culminating
         public static bool areStatsEntered = false;
         public static bool musicPlaying = false;
         public static bool isMainMenuCreated = false;
+        public static bool isHUDCreated = false;
         public static bool isLeaderboardCreated = false;
         public static bool areStatsWriten = false;
 
         //Integers
-        public static int Difficulty = 1;
+        public static int int_Difficulty = 1;
         public static int p_score = 0;
         public static int p_lives = 3;
+        public static int p_combo = 0;
+        public static int p_bestcombo = 0;
         public static int first_p_score = 0;
-        public static int first_p_round = 0;
+        public static int first_p_combo = 0;
         public static int second_p_score = 0;
-        public static int second_p_round = 0;
+        public static int second_p_combo = 0;
         public static int third_p_score = 0;
-        public static int third_p_round = 0;
+        public static int third_p_combo = 0;
         public static int fourth_p_score = 0;
-        public static int fourth_p_round = 0;
+        public static int fourth_p_combo = 0;
         public static int fifth_p_score = 0;
-        public static int fifth_p_round = 0;
+        public static int fifth_p_combo = 0;
         public static int yourPlace = 0;
 
         //Strings
+        public static string str_Difficulty = "Easy";
+        public static string str_Song = "Sensoki";
         public static string first_p_name = "name";
-        public static string first_p_stats = "Score: " + first_p_score.ToString() + "\nRound:" + first_p_round.ToString();
+        public static string first_p_stats = "Score: " + first_p_score.ToString() + "   Combo: " + first_p_combo.ToString() + "\nDifficulty: " + first_p_difficulty;
         public static string second_p_name = "name";
-        public static string second_p_stats = "Score: " + second_p_score.ToString() + "\nRound:" + second_p_round.ToString();
+        public static string second_p_stats = "Score: " + second_p_score.ToString() + "   Combo: " + second_p_combo.ToString() + "\nDifficulty: " + second_p_difficulty;
         public static string third_p_name = "name";
-        public static string third_p_stats = "Score: " + third_p_score.ToString() + "\nRound:" + third_p_round.ToString();
+        public static string third_p_stats = "Score: " + third_p_score.ToString() + "   Combo: " + third_p_combo.ToString() + "\nDifficulty: " + third_p_difficulty;
         public static string fourth_p_name = "name";
-        public static string fourth_p_stats = "Score: " + fourth_p_score.ToString() + "\nRound:" + fourth_p_round.ToString();
+        public static string fourth_p_stats = "Score: " + fourth_p_score.ToString() + "   Combo: " + fourth_p_combo.ToString() + "\nDifficulty: " + fourth_p_difficulty;
         public static string fifth_p_name = "name";
-        public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "\nRound:" + fifth_p_round.ToString();
+        public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "   Combo: " + fifth_p_combo.ToString() + "\nDifficulty: " + fifth_p_difficulty;
+        public static string yourStats = "Score: " + p_score.ToString() + "   Combo: " + p_combo.ToString() + "\nDifficulty: " + str_Difficulty;
         public static string yourName;
         public static string[] censoredwords = new string[34];
+
+        public static string first_p_difficulty;
+        public static string second_p_difficulty;
+        public static string third_p_difficulty;
+        public static string fourth_p_difficulty;
+        public static string fifth_p_difficulty;
 
         //Misc
         public static Point p_mouse;
@@ -95,15 +107,15 @@ namespace u5_Culminating
         private static Random rnd = new Random();
         public static int GetRandomFruitKind()
         {
-            return rnd.Next(0, 6);
+            return rnd.Next(0,6);
         }
         public static int ChanceForFruit()
         {
-            return rnd.Next(0, 51);
+            return rnd.Next(0, (33 / Globals.int_Difficulty + (3 * Globals.int_Difficulty)));
         }
         public static int FruitVelocity()
         {
-            return rnd.Next(0, 8);
+            return rnd.Next(0, 9);
         }
         public static double SliceFall()
         {
@@ -114,6 +126,7 @@ namespace u5_Culminating
     public partial class MainWindow : Window
     {
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
+        System.Windows.Threading.DispatcherTimer comboTimer = new System.Windows.Threading.DispatcherTimer();
         Sword player;
 
 
@@ -125,6 +138,11 @@ namespace u5_Culminating
         TextBlock txt_Begin = new TextBlock();
         ComboBox CB_Difficulty = new ComboBox();
         TextBlock txt_Difficulty = new TextBlock();
+        TextBlock txt_Score = new TextBlock();
+        TextBlock txt_Lives = new TextBlock();
+        TextBlock txt_Combo = new TextBlock();
+        ComboBox CB_Song = new ComboBox();
+        TextBlock txt_Song = new TextBlock();
         Button btn_Back = new Button();
         TextBox inpt_name = new TextBox();
         TextBlock txt_name = new TextBlock();
@@ -177,6 +195,10 @@ namespace u5_Culminating
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
 
+            comboTimer.Tick += comboTimer_Tick;
+            comboTimer.Interval = new TimeSpan(0, 0, 0, 3);//combotimer
+            comboTimer.Start();
+
             //If the directory in the debug folder doesn't exist, create it.
             if (!Directory.Exists(Globals.path))
             {
@@ -208,8 +230,8 @@ namespace u5_Culminating
 
             canvas_mainmenu.Children.Add(btn_Play);
             canvas_mainmenu.Children.Add(btn_Settings);
-            btn_Play.Click += new RoutedEventHandler(Click_Play); btn_Play.Content = "Play!"; btn_Play.Width = 100; btn_Play.Height = 30; btn_Play.FontSize = 20; Canvas.SetTop(btn_Play, 136); Canvas.SetLeft(btn_Play, 286);
-            btn_Settings.Click += new RoutedEventHandler(Click_Settings); btn_Settings.Content = "Settings"; btn_Settings.Width = 100; btn_Settings.Height = 30; btn_Settings.FontSize = 20; Canvas.SetTop(btn_Settings, 171); Canvas.SetLeft(btn_Settings, 286);
+            btn_Play.Click += new RoutedEventHandler(Click_Play); btn_Play.Content = "Play!"; btn_Play.Width = 100; btn_Play.Height = 35; btn_Play.FontSize = 20; Canvas.SetTop(btn_Play, 136); Canvas.SetLeft(btn_Play, 286);
+            btn_Settings.Click += new RoutedEventHandler(Click_Settings); btn_Settings.Content = "Settings"; btn_Settings.Width = 100; btn_Settings.Height = 35; btn_Settings.FontSize = 20; Canvas.SetTop(btn_Settings, 176); Canvas.SetLeft(btn_Settings, 286);
 
             Globals.isMainMenuCreated = true;
         }
@@ -217,26 +239,51 @@ namespace u5_Culminating
         private void MusicEvents()
         {
 
-
-            if (Globals.musicPlaying == false)
+            if (Globals.str_Song == "Sensoki")
             {
-                Globals.musicPlayer.Stop();
-                Uri music = new Uri(@"Sounds\mainmenu.wav", UriKind.Relative);
-                Globals.musicPlayer.SoundLocation = music.ToString();
-                Globals.musicPlayer.PlayLooping();
+                if (Globals.musicPlaying == false)
+                {
+                    Globals.musicPlayer.Stop();
+                    Uri music = new Uri(@"Sounds\Sensoki.wav", UriKind.Relative);
+                    Globals.musicPlayer.SoundLocation = music.ToString();
+                    Globals.musicPlayer.PlayLooping();
 
-                Globals.musicPlaying = true;
+                    Globals.musicPlaying = true;
+                }
+            }
+            else if (Globals.str_Song == "Tokyo")
+            {
+                if (Globals.musicPlaying == false)
+                {
+                    Globals.musicPlayer.Stop();
+                    Uri music = new Uri(@"Sounds\Tokyo.wav", UriKind.Relative);
+                    Globals.musicPlayer.SoundLocation = music.ToString();
+                    Globals.musicPlayer.PlayLooping();
+
+                    Globals.musicPlaying = true;
+                }
+            }
+            else if (Globals.str_Song == "Uchigatana")
+            {
+                if (Globals.musicPlaying == false)
+                {
+                    Globals.musicPlayer.Stop();
+                    Uri music = new Uri(@"Sounds\Uchigatana.wav", UriKind.Relative);
+                    Globals.musicPlayer.SoundLocation = music.ToString();
+                    Globals.musicPlayer.PlayLooping();
+
+                    Globals.musicPlaying = true;
+                }
             }
 
 
         }
 
-
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             if(gameState == GameState.MainMenu)
             {
-                this.Title = "Fruit Assasian V0.9 - Current Top Player: " + Globals.first_p_name;
+                this.Title = "Fruit Assasian V0.9 - Current Top Player: " + Globals.first_p_name + ", Score: " + Globals.first_p_score;
                 if (Globals.isMainMenuCreated == false)
                 {
                     CreateMainmenu();
@@ -260,12 +307,12 @@ namespace u5_Culminating
             MusicEvents();
             if (gameState == GameState.GameOn)
             {
-                this.Title = "Score: " + Globals.p_score + " - Lives: " + Globals.p_lives;
+                this.Title = "Fruit Assasian V0.9 - Current Top Player: " + Globals.first_p_name + ", Score: " + Globals.first_p_score;
 
+                HUD();
                 CreateFruits();
                 CheckCollision();
                 RemoveInstances();
-
                 InstancesTick();
 
             }
@@ -276,15 +323,18 @@ namespace u5_Culminating
             {
                 if (CB_Difficulty.Text == "Easy")
                 {
-                    Globals.Difficulty = 1;
+                    Globals.int_Difficulty = 1;
+                    Globals.str_Difficulty = "Easy";
                 }
                 else if (CB_Difficulty.Text == "Medium")
                 {
-                    Globals.Difficulty = 2;
+                    Globals.int_Difficulty = 2;
+                    Globals.str_Difficulty = "Medium";
                 }
                 else if (CB_Difficulty.Text == "Hard")
                 {
-                    Globals.Difficulty = 3;
+                    Globals.int_Difficulty = 3;
+                    Globals.str_Difficulty = "Hard";
                 }
             }
 
@@ -309,6 +359,7 @@ namespace u5_Culminating
                 //Create leaderboard instance/objects
                 if (Globals.isLeaderboardCreated == false)
                 {
+                    Globals.yourStats = "Score: " + Globals.p_score.ToString() + "   Best Combo:" + Globals.p_bestcombo.ToString() + "\nDifficulty:" + Globals.str_Difficulty;
                     CreateLeaderboard(leaderboard);
                     leaderboard.Fill = Globals.sprite_Leaderboard;
                 }
@@ -319,6 +370,52 @@ namespace u5_Culminating
                 }
 
             }
+        }
+
+        private void HUD()
+        {
+            if (Globals.isHUDCreated == false)
+            {
+                canvas_battleground.Children.Add(txt_Lives);
+                canvas_battleground.Children.Add(txt_Score);
+                canvas_battleground.Children.Add(txt_Combo);
+
+
+                txt_Lives.FontSize = 18;
+                txt_Lives.FontWeight = FontWeights.Bold;
+                txt_Lives.Foreground = Brushes.White;
+                Canvas.SetLeft(txt_Lives, 5);
+
+                txt_Score.FontSize = 18;
+                txt_Score.FontWeight = FontWeights.Bold;
+                txt_Score.Foreground = Brushes.White;
+                Canvas.SetLeft(txt_Score, 5);
+                Canvas.SetTop(txt_Score, 25);
+
+                txt_Combo.FontSize = 18;
+                txt_Combo.FontWeight = FontWeights.Bold;
+                txt_Combo.Foreground = Brushes.White;
+                Canvas.SetLeft(txt_Combo, 5);
+                Canvas.SetTop(txt_Combo, 50);
+
+                Globals.isHUDCreated = true;
+            }
+
+            txt_Lives.Text = "Lives: " + Globals.p_lives;
+            txt_Score.Text = "Score: " + Globals.p_score;
+            txt_Combo.Text = "Combo: " + Globals.p_combo;
+        }
+
+        private void comboTimer_Tick(object sender, EventArgs e)
+        {
+            if (Globals.p_combo > Globals.p_bestcombo)
+            {
+                Globals.p_bestcombo = Globals.p_combo;
+            }
+
+            Globals.p_combo = 0;
+            comboTimer.Stop();
+            comboTimer.Start();
         }
 
         private void InstancesTick()
@@ -373,27 +470,47 @@ namespace u5_Culminating
             {
                 int fruitkind = Util.GetRandomFruitKind();
 
-                if (fruitkind == 5)
+                if (fruitkind == 1)
                 {
-                    Bomb bomba = new Bomb(canvas_battleground, this);
-                    bomblist.Add(bomba);
+                    if (Globals.int_Difficulty == 1)
+                    {
+                        int.TryParse(Util.FruitVelocity().ToString(), out int x);
+                        if (x > 2)
+                        {
+                            Bomb bomba = new Bomb(canvas_battleground, this);
+                            bomblist.Add(bomba);
+                        }
+                    }
+                    else
+                    {
+                        Bomb bomba = new Bomb(canvas_battleground, this);
+                        bomblist.Add(bomba);
+                    }
                 }
-                if (fruitkind == 4)
+                if (fruitkind == 2)
                 {
                     f_Apple apple = new f_Apple(canvas_battleground, this);
                     applelist.Add(apple);
                 }
-                else if (fruitkind == 3)
+                else if (fruitkind == 5)
                 {
-                    f_Watermelon watermelon = new f_Watermelon(canvas_battleground, this);
-                    watermelonlist.Add(watermelon);
+                    if (Globals.int_Difficulty == 3)
+                    {
+                        Bomb bomba = new Bomb(canvas_battleground, this);
+                        bomblist.Add(bomba);
+                    }
+                    else
+                    {
+                        f_Watermelon watermelon = new f_Watermelon(canvas_battleground, this);
+                        watermelonlist.Add(watermelon);
+                    }
                 }
-                else if (fruitkind == 2)
+                else if (fruitkind == 4)
                 {
                     f_Pineapple pineapple = new f_Pineapple(canvas_battleground, this);
                     pineapplelist.Add(pineapple);
                 }
-                else if (fruitkind == 1)
+                else if (fruitkind == 3)
                 {
                     f_Banana banana = new f_Banana(canvas_battleground, this);
                     bananalist.Add(banana);
@@ -417,7 +534,10 @@ namespace u5_Culminating
                         a.destroy();
                         appletodestroy.Add(a);
 
-                        Globals.p_score = Globals.p_score + (3 * Globals.Difficulty);
+                        Globals.p_score = Globals.p_score + ((3 * Globals.int_Difficulty) * (1 + (Globals.p_combo/25)));
+                        Globals.p_combo++;
+                        comboTimer.Stop();
+                        comboTimer.Start();
 
                         f_AppleSlice appleSlice = new f_AppleSlice(canvas_battleground, this);
                         appleslicelist.Add(appleSlice);
@@ -454,7 +574,10 @@ namespace u5_Culminating
                         w.destroy();
                         watermelontodestroy.Add(w);
 
-                        Globals.p_score = Globals.p_score + (2 * Globals.Difficulty);
+                        Globals.p_score = Globals.p_score + ((2 * Globals.int_Difficulty) * (1 + (Globals.p_combo / 25)));
+                        Globals.p_combo++;
+                        comboTimer.Stop();
+                        comboTimer.Start();
 
                         f_WatermelonSlice watermelonSlice = new f_WatermelonSlice(canvas_battleground, this);
                         watermelonslicelist.Add(watermelonSlice);
@@ -492,7 +615,10 @@ namespace u5_Culminating
                         pA.destroy();
                         pineappletodestroy.Add(pA);
 
-                        Globals.p_score = Globals.p_score + (2 * Globals.Difficulty);
+                        Globals.p_score = Globals.p_score + ((2 * Globals.int_Difficulty) * (1 + (Globals.p_combo / 25)));
+                        Globals.p_combo++;
+                        comboTimer.Stop();
+                        comboTimer.Start();
 
                         f_PineappleSlice pineappleSlice = new f_PineappleSlice(canvas_battleground, this);
                         pineappleslicelist.Add(pineappleSlice);
@@ -528,7 +654,10 @@ namespace u5_Culminating
                         b.destroy();
                         bananatodestroy.Add(b);
 
-                        Globals.p_score = Globals.p_score + (4 * Globals.Difficulty);
+                        Globals.p_score = Globals.p_score + ((4 * Globals.int_Difficulty) * (1 + (Globals.p_combo / 25)));
+                        Globals.p_combo++;
+                        comboTimer.Stop();
+                        comboTimer.Start();
 
                         f_BananaSlice bananaSlice = new f_BananaSlice(canvas_battleground, this);
                         bananaslicelist.Add(bananaSlice);
@@ -568,6 +697,15 @@ namespace u5_Culminating
                         {
                             MessageBox.Show("oof");
                             Globals.p_lives = Globals.p_lives - 1;
+
+                            if (Globals.p_combo > Globals.p_bestcombo)
+                            {
+                                Globals.p_bestcombo = Globals.p_combo;
+                            }
+
+                            Globals.p_combo = 0;
+                            comboTimer.Stop();
+                            comboTimer.Start();
                         }
                         else if (Globals.p_lives == 1)
                         {
@@ -637,34 +775,17 @@ namespace u5_Culminating
                 swordlist.Add(player);
             }
 
-            Console.WriteLine(Globals.Difficulty);
+            Console.WriteLine(Globals.int_Difficulty);
+            Console.WriteLine(Globals.str_Difficulty);
             gameState = GameState.GameOn;
         }
+
         public void Click_Settings(object sender, RoutedEventArgs e)
         {
             canvas_settings.Children.Clear();
+            canvas_settings.Background = Globals.RBackground;
 
-            txt_Difficulty.Text = "Difficulty:";
-            canvas_settings.Children.Add(txt_Difficulty);
-
-            btn_Back.Content = "Back";
-            btn_Back.Width = 90;
-            Canvas.SetLeft(btn_Back, 10);
-            Canvas.SetTop(btn_Back, 619);
-            btn_Back.Click += new RoutedEventHandler(Click_Back);
-            canvas_settings.Children.Add(btn_Back);
-
-
-            CB_Difficulty.Width = 100;
-            CB_Difficulty.DropDownOpened += new EventHandler(CB_Difficulty_Down);
-            CB_Difficulty.Items.Add("Easy");
-            CB_Difficulty.Items.Add("Medium");
-            CB_Difficulty.Items.Add("Hard");
-            canvas_settings.Children.Add(CB_Difficulty);
-            Canvas.SetTop(CB_Difficulty, 20);
-
-
-
+            CreateSettings();
 
             if (gameState == GameState.MainMenu)
             {
@@ -675,8 +796,50 @@ namespace u5_Culminating
             gameState = GameState.Settings;
         }
 
-        public void CB_Difficulty_Down(object Sender, EventArgs e)
+        private void CreateSettings()
         {
+            txt_Difficulty.Text = "Difficulty:";
+            txt_Difficulty.FontSize = 24;
+            txt_Difficulty.FontWeight = FontWeights.Bold;
+            txt_Difficulty.Foreground = Brushes.White;
+            canvas_settings.Children.Add(txt_Difficulty);
+            Canvas.SetLeft(txt_Difficulty, 5);
+
+            btn_Back.Content = "Back";
+            btn_Back.Width = 90;
+            Canvas.SetLeft(btn_Back, 5);
+            Canvas.SetTop(btn_Back, 619);
+            btn_Back.Click += new RoutedEventHandler(Click_Back);
+            canvas_settings.Children.Add(btn_Back);
+
+            CB_Difficulty.Items.Clear();
+            CB_Difficulty.Width = 100;
+            CB_Difficulty.SelectedItem = Globals.str_Difficulty;
+            CB_Difficulty.Items.Add("Easy");
+            CB_Difficulty.Items.Add("Medium");
+            CB_Difficulty.Items.Add("Hard");
+            canvas_settings.Children.Add(CB_Difficulty);
+            Canvas.SetTop(CB_Difficulty, 35);
+            Canvas.SetLeft(CB_Difficulty, 5);
+
+
+            txt_Song.Text = "Song:";
+            txt_Song.FontSize = 24;
+            txt_Song.FontWeight = FontWeights.Bold;
+            txt_Song.Foreground = Brushes.White;
+            canvas_settings.Children.Add(txt_Song);
+            Canvas.SetLeft(txt_Song, 5);
+            Canvas.SetTop(txt_Song, 70);
+
+            CB_Song.Items.Clear();
+            CB_Song.Width = 100;
+            CB_Song.SelectedItem = Globals.str_Song;
+            CB_Song.Items.Add("Sensoki");
+            CB_Song.Items.Add("Uchigatana");
+            CB_Song.Items.Add("Tokyo");
+            canvas_settings.Children.Add(CB_Song);
+            Canvas.SetTop(CB_Song, 105);
+            Canvas.SetLeft(CB_Song, 5);
         }
 
         public void Click_Back(object sender, RoutedEventArgs e)
@@ -685,6 +848,31 @@ namespace u5_Culminating
             {
                 canvas_mainmenu.Visibility = Visibility.Visible;
                 canvas_settings.Visibility = Visibility.Hidden;
+
+                if (CB_Song.Text != Globals.str_Song)
+                {
+                    Globals.musicPlaying = false;
+
+                    if (CB_Song.Text == "Sensoki")
+                    {
+                        Globals.str_Song = "Sensoki";
+                    }
+                    else if (CB_Song.Text == "Uchigatana")
+                    {
+                        Globals.str_Song = "Uchigatana";
+                    }
+                    else if (CB_Song.Text == "Tokyo")
+                    {
+                        Globals.str_Song = "Tokyo";
+                    }
+                    else if (CB_Song.Text == "Sakura")
+                    {
+                        Globals.str_Song = "Sakura";
+                    }
+                }
+                Console.WriteLine("Currently Playing: " + Globals.str_Song);
+
+
             }
 
             gameState = GameState.MainMenu;
@@ -721,7 +909,7 @@ namespace u5_Culminating
             //Removes objects and prepares for switch to main menu
             else if (Globals.areStatsEntered == true)
             {
-                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
+                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 620); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
 
                 canvas_leaderboard.Children.Remove(txt_name);
                 canvas_leaderboard.Children.Remove(inpt_name);
@@ -742,17 +930,17 @@ namespace u5_Culminating
                 txt_name.Height = 250; txt_name.Width = 200; txt_name.Text = "Enter your name"; txt_name.TextAlignment = TextAlignment.Center; txt_name.FontSize = 24; txt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(txt_name, 10); Canvas.SetLeft(txt_name, 240); txt_name.Foreground = Brushes.White;
                 inpt_name.Height = 25; inpt_name.Width = 291; inpt_name.Text = "Enter your name here! (Max 10 letters)"; inpt_name.TextAlignment = TextAlignment.Center; inpt_name.FontSize = 12; inpt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(inpt_name, 50); Canvas.SetLeft(inpt_name, 195);
                 btn_submit.Height = 25; btn_submit.Width = 291; btn_submit.Content = "Submit"; Canvas.SetTop(btn_submit, 75); Canvas.SetLeft(btn_submit, 195); btn_submit.Click += new RoutedEventHandler(click_btnSubmit);
-                first_name.Height = 25; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 160); Canvas.SetLeft(first_name, 273); first_name.FontSize = 18; first_name.FontFamily = new FontFamily("Times New Roman"); first_name.Foreground = Brushes.Gold;
+                first_name.Height = 30; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 165); Canvas.SetLeft(first_name, 273); first_name.FontSize = 24; first_name.FontFamily = new FontFamily("Times New Roman"); first_name.Foreground = Brushes.Gold; first_name.FontWeight = FontWeights.Bold;
                 first_stats.Height = 50; first_stats.Width = 200; first_stats.Text = Globals.first_p_stats; Canvas.SetTop(first_stats, 200); Canvas.SetLeft(first_stats, 273); first_stats.FontSize = 18; first_stats.FontFamily = new FontFamily("Times New Roman");
                 second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 265); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman"); second_name.Foreground = Brushes.White;
-                second_stats.Height = 25; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
+                second_stats.Height = 30; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
                 third_name.Height = 25; third_name.Width = 200; third_name.Text = Globals.third_p_name; Canvas.SetTop(third_name, 340); Canvas.SetLeft(third_name, 273); third_name.FontSize = 12; third_name.FontFamily = new FontFamily("Times New Roman"); third_name.Foreground = Brushes.White;
-                third_stats.Height = 25; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
-                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 415); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman"); fourth_name.Foreground = Brushes.Salmon;
-                fourth_stats.Height = 25; fourth_stats.Width = 200; fourth_stats.Text = Globals.fourth_p_stats; Canvas.SetTop(fourth_stats, 432); Canvas.SetLeft(fourth_stats, 273); fourth_stats.FontSize = 12; fourth_stats.FontFamily = new FontFamily("Times New Roman");
-                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 470); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman"); fifth_name.Foreground = Brushes.Salmon;
-                fifth_stats.Height = 25; fifth_stats.Width = 200; fifth_stats.Text = Globals.fifth_p_stats; Canvas.SetTop(fifth_stats, 488); Canvas.SetLeft(fifth_stats, 273); fifth_stats.FontSize = 12; fifth_stats.FontFamily = new FontFamily("Times New Roman");
-                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = "Score: " + Globals.p_score; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman");
+                third_stats.Height = 30; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
+                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 415); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman"); fourth_name.Foreground = Brushes.Black;
+                fourth_stats.Height = 30; fourth_stats.Width = 200; fourth_stats.Text = Globals.fourth_p_stats; Canvas.SetTop(fourth_stats, 432); Canvas.SetLeft(fourth_stats, 273); fourth_stats.FontSize = 12; fourth_stats.FontFamily = new FontFamily("Times New Roman");
+                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 470); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman"); fifth_name.Foreground = Brushes.Black;
+                fifth_stats.Height = 30; fifth_stats.Width = 200; fifth_stats.Text = Globals.fifth_p_stats; Canvas.SetTop(fifth_stats, 488); Canvas.SetLeft(fifth_stats, 273); fifth_stats.FontSize = 12; fifth_stats.FontFamily = new FontFamily("Times New Roman");
+                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = Globals.yourStats; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman");
                 
             }
 
@@ -763,18 +951,18 @@ namespace u5_Culminating
                 txt_name.Height = 250; txt_name.Width = 200; txt_name.Text = "Enter your name"; txt_name.TextAlignment = TextAlignment.Center; txt_name.FontSize = 24; txt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(txt_name, 10); Canvas.SetLeft(txt_name, 240); txt_name.Foreground = Brushes.White;
                 inpt_name.Height = 25; inpt_name.Width = 291; inpt_name.Text = "Enter your name here! (Max 10 letters)"; inpt_name.TextAlignment = TextAlignment.Center; inpt_name.FontSize = 12; inpt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(inpt_name, 50); Canvas.SetLeft(inpt_name, 195);
                 btn_submit.Height = 25; btn_submit.Width = 291; btn_submit.Content = "Submit"; Canvas.SetTop(btn_submit, 75); Canvas.SetLeft(btn_submit, 195); btn_submit.Click += new RoutedEventHandler(click_btnSubmit);
-                first_name.Height = 25; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 160); Canvas.SetLeft(first_name, 273); first_name.FontSize = 18; first_name.FontFamily = new FontFamily("Times New Roman"); first_name.Foreground = Brushes.Gold;
+                first_name.Height = 30; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 165); Canvas.SetLeft(first_name, 273); first_name.FontSize = 24; first_name.FontFamily = new FontFamily("Times New Roman"); first_name.Foreground = Brushes.Gold; first_name.FontWeight = FontWeights.Bold;
                 first_stats.Height = 50; first_stats.Width = 200; first_stats.Text = Globals.first_p_stats; Canvas.SetTop(first_stats, 200); Canvas.SetLeft(first_stats, 273); first_stats.FontSize = 18; first_stats.FontFamily = new FontFamily("Times New Roman"); 
                 second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 265); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman"); second_name.Foreground = Brushes.White;
                 second_stats.Height = 25; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
                 third_name.Height = 25; third_name.Width = 200; third_name.Text = Globals.third_p_name; Canvas.SetTop(third_name, 340); Canvas.SetLeft(third_name, 273); third_name.FontSize = 12; third_name.FontFamily = new FontFamily("Times New Roman"); third_name.Foreground = Brushes.White;
                 third_stats.Height = 25; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
-                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 415); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman"); fourth_name.Foreground = Brushes.Salmon;
+                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 415); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman"); fourth_name.Foreground = Brushes.Black;
                 fourth_stats.Height = 25; fourth_stats.Width = 200; fourth_stats.Text = Globals.fourth_p_stats; Canvas.SetTop(fourth_stats, 432); Canvas.SetLeft(fourth_stats, 273); fourth_stats.FontSize = 12; fourth_stats.FontFamily = new FontFamily("Times New Roman");
-                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 470); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman"); fifth_name.Foreground = Brushes.Salmon;
+                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 470); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman"); fifth_name.Foreground = Brushes.Black;
                 fifth_stats.Height = 25; fifth_stats.Width = 200; fifth_stats.Text = Globals.fifth_p_stats; Canvas.SetTop(fifth_stats, 488); Canvas.SetLeft(fifth_stats, 273); fifth_stats.FontSize = 12; fifth_stats.FontFamily = new FontFamily("Times New Roman");
-                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = "Score: " + Globals.p_score; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman"); 
-                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
+                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = Globals.yourStats; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman"); 
+                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 590); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
 
                 //Remove unnecessary objects
                 canvas_leaderboard.Children.Remove(txt_name);
@@ -971,31 +1159,41 @@ namespace u5_Culminating
                         {
                             Globals.first_p_name = StatLineReader.ReadLine();
                             int.TryParse(StatLineReader.ReadLine(), out Globals.first_p_score);
-                            x = x - 2;
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.first_p_combo);
+                            Globals.first_p_difficulty = StatLineReader.ReadLine();
+                            x = x - 4;
                         }
                         if (line.Contains("2nd"))
                         {
                             Globals.second_p_name = StatLineReader.ReadLine();
                             int.TryParse(StatLineReader.ReadLine(), out Globals.second_p_score);
-                            x = x - 2;
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.second_p_combo);
+                            Globals.second_p_difficulty = StatLineReader.ReadLine();
+                            x = x - 4;
                         }
                         if (line.Contains("3rd"))
                         {
                             Globals.third_p_name = StatLineReader.ReadLine();
                             int.TryParse(StatLineReader.ReadLine(), out Globals.third_p_score);
-                            x = x - 2;
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.third_p_combo);
+                            Globals.third_p_difficulty = StatLineReader.ReadLine();
+                            x = x - 4;
                         }
                         if (line.Contains("4th"))
                         {
                             Globals.fourth_p_name = StatLineReader.ReadLine();
                             int.TryParse(StatLineReader.ReadLine(), out Globals.fourth_p_score);
-                            x = x - 2;
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fourth_p_combo);
+                            Globals.fourth_p_difficulty = StatLineReader.ReadLine();
+                            x = x - 4;
                         }
                         if (line.Contains("5th"))
                         {
                             Globals.fifth_p_name = StatLineReader.ReadLine();
                             int.TryParse(StatLineReader.ReadLine(), out Globals.fifth_p_score);
-                            x = x - 2;
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fifth_p_combo);
+                            Globals.fifth_p_difficulty = StatLineReader.ReadLine();
+                            x = x - 4;
                         }
                     }
                 }
@@ -1020,53 +1218,84 @@ namespace u5_Culminating
             {
                 Globals.fifth_p_name = Globals.fourth_p_name;
                 Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fifth_p_combo = Globals.fourth_p_combo;
+                Globals.fifth_p_difficulty = Globals.fourth_p_difficulty;
                 Globals.fourth_p_name = Globals.third_p_name;
                 Globals.fourth_p_score = Globals.third_p_score;
+                Globals.fourth_p_combo = Globals.third_p_combo;
+                Globals.fourth_p_difficulty = Globals.third_p_difficulty;
                 Globals.third_p_name = Globals.second_p_name;
                 Globals.third_p_score = Globals.second_p_score;
+                Globals.third_p_combo = Globals.second_p_combo;
+                Globals.third_p_difficulty = Globals.second_p_difficulty;
                 Globals.second_p_name = Globals.first_p_name;
                 Globals.second_p_score = Globals.first_p_score;
+                Globals.second_p_combo = Globals.first_p_combo;
+                Globals.second_p_difficulty = Globals.first_p_difficulty;
                 Globals.first_p_score = Globals.p_score;
                 Globals.first_p_name = Globals.yourName;
+                Globals.first_p_combo = Globals.p_bestcombo;
+                Globals.first_p_difficulty = Globals.str_Difficulty;
             }
             else if (Globals.p_score > Globals.second_p_score)
             {
                 Globals.fifth_p_name = Globals.fourth_p_name;
                 Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fifth_p_combo = Globals.fourth_p_combo;
+                Globals.fifth_p_difficulty = Globals.fourth_p_difficulty;
                 Globals.fourth_p_name = Globals.third_p_name;
                 Globals.fourth_p_score = Globals.third_p_score;
+                Globals.fourth_p_combo = Globals.third_p_combo;
+                Globals.fourth_p_difficulty = Globals.third_p_difficulty;
                 Globals.third_p_name = Globals.second_p_name;
                 Globals.third_p_score = Globals.second_p_score;
+                Globals.third_p_combo = Globals.second_p_combo;
+                Globals.third_p_difficulty = Globals.second_p_difficulty;
                 Globals.second_p_score = Globals.p_score;
                 Globals.second_p_name = Globals.yourName;
+                Globals.second_p_combo = Globals.p_bestcombo;
+                Globals.second_p_difficulty = Globals.str_Difficulty;
             }
             else if (Globals.p_score > Globals.third_p_score)
             {
                 Globals.fifth_p_name = Globals.fourth_p_name;
                 Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fifth_p_combo = Globals.fourth_p_combo;
+                Globals.fifth_p_difficulty = Globals.fourth_p_difficulty;
                 Globals.fourth_p_name = Globals.third_p_name;
                 Globals.fourth_p_score = Globals.third_p_score;
+                Globals.fourth_p_combo = Globals.third_p_combo;
+                Globals.fourth_p_difficulty = Globals.third_p_difficulty;
                 Globals.third_p_score = Globals.p_score;
                 Globals.third_p_name = Globals.yourName;
+                Globals.third_p_combo = Globals.p_bestcombo;
+                Globals.third_p_difficulty = Globals.str_Difficulty;
             }
             else if (Globals.p_score > Globals.fourth_p_score)
             {
                 Globals.fifth_p_name = Globals.fourth_p_name;
                 Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fifth_p_combo = Globals.fourth_p_combo;
+                Globals.fifth_p_difficulty = Globals.fourth_p_difficulty;
                 Globals.fourth_p_score = Globals.p_score;
                 Globals.fourth_p_name = Globals.yourName;
+                Globals.fourth_p_combo = Globals.p_bestcombo;
+                Globals.fourth_p_difficulty = Globals.str_Difficulty;
             }
             else if (Globals.p_score > Globals.fifth_p_score)
             {
                 Globals.fifth_p_score = Globals.p_score;
                 Globals.fifth_p_name = Globals.yourName;
+                Globals.fifth_p_combo = Globals.p_bestcombo;
+                Globals.fifth_p_difficulty = Globals.str_Difficulty;
             }
 
-            Globals.first_p_stats = "Score: " + Globals.first_p_score.ToString();
-            Globals.second_p_stats = "Score: " + Globals.second_p_score.ToString();
-            Globals.third_p_stats = "Score: " + Globals.third_p_score.ToString();
-            Globals.fourth_p_stats = "Score: " + Globals.fourth_p_score.ToString();
-            Globals.fifth_p_stats = "Score: " + Globals.fifth_p_score.ToString();
+            Globals.yourStats = "Score: " + Globals.p_score.ToString() + "   Best Combo: " + Globals.p_bestcombo.ToString() + "\nDifficulty: " + Globals.str_Difficulty;
+            Globals.first_p_stats = "Score: " + Globals.first_p_score.ToString() + "   Best Combo: " + Globals.first_p_combo.ToString() + "\nDifficulty: " + Globals.first_p_difficulty;
+            Globals.second_p_stats = "Score: " + Globals.second_p_score.ToString() + "   Best Combo: " + Globals.second_p_combo.ToString() + "\nDifficulty: " + Globals.second_p_difficulty;
+            Globals.third_p_stats = "Score: " + Globals.third_p_score.ToString() + "   Best Combo: " + Globals.third_p_combo.ToString() + "\nDifficulty: " + Globals.third_p_difficulty;
+            Globals.fourth_p_stats = "Score: " + Globals.fourth_p_score.ToString() + "   Best Combo: " + Globals.fourth_p_combo.ToString() + "\nDifficulty: " + Globals.fourth_p_difficulty;
+            Globals.fifth_p_stats = "Score: " + Globals.fifth_p_score.ToString() + "   Best Combo: " + Globals.fifth_p_combo.ToString() + "\nDifficulty: " + Globals.fifth_p_difficulty;
         }
 
         public static void WriteStats()
@@ -1079,22 +1308,32 @@ namespace u5_Culminating
                 StatWriter.WriteLine("1st");
                 StatWriter.WriteLine(Globals.first_p_name);
                 StatWriter.WriteLine(Globals.first_p_score);
+                StatWriter.WriteLine(Globals.first_p_combo);
+                StatWriter.WriteLine(Globals.first_p_difficulty);
                 StatWriter.WriteLine("");
                 StatWriter.WriteLine("2nd");
                 StatWriter.WriteLine(Globals.second_p_name);
                 StatWriter.WriteLine(Globals.second_p_score);
+                StatWriter.WriteLine(Globals.second_p_combo);
+                StatWriter.WriteLine(Globals.second_p_difficulty);
                 StatWriter.WriteLine("");
                 StatWriter.WriteLine("3rd");
                 StatWriter.WriteLine(Globals.third_p_name);
                 StatWriter.WriteLine(Globals.third_p_score);
+                StatWriter.WriteLine(Globals.third_p_combo);
+                StatWriter.WriteLine(Globals.third_p_difficulty);
                 StatWriter.WriteLine("");
                 StatWriter.WriteLine("4th");
                 StatWriter.WriteLine(Globals.fourth_p_name);
                 StatWriter.WriteLine(Globals.fourth_p_score);
+                StatWriter.WriteLine(Globals.fourth_p_combo);
+                StatWriter.WriteLine(Globals.fourth_p_difficulty);
                 StatWriter.WriteLine("");
                 StatWriter.WriteLine("5th");
                 StatWriter.WriteLine(Globals.fifth_p_name);
                 StatWriter.WriteLine(Globals.fifth_p_score);
+                StatWriter.WriteLine(Globals.fifth_p_combo);
+                StatWriter.WriteLine(Globals.fifth_p_difficulty);
             }
 
             WebClient wc = new WebClient();

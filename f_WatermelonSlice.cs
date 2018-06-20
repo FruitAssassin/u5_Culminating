@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Drawing;
 
 namespace u5_Culminating
 {
@@ -24,6 +23,7 @@ namespace u5_Culminating
         Random rnum = new Random();
         string movement;
         public int rotation = 0;
+        int velocity = 0;
 
 
         //Create Sprites
@@ -32,7 +32,7 @@ namespace u5_Culminating
 
         public f_WatermelonSlice(Canvas c, MainWindow w)
         {
-            //Generate Fruit
+            //Generate Alien
             canvas = c;
             window = w;
 
@@ -61,18 +61,20 @@ namespace u5_Culminating
 
 
 
-        //Controls Movement and Updates Points
+
         public void Tick()
         {
             Movement();
 
+            velocity++;
+            WatermelonSliceRectangle.Opacity = WatermelonSliceRectangle.Opacity - 0.03;
             Canvas.SetTop(WatermelonSliceRectangle, point.Y);
             Canvas.SetLeft(WatermelonSliceRectangle, point.X);
 
             if (rotation == 180)
             {
                 WatermelonSliceRectangle.Fill = s_WatermelonSlice2;
-
+                
             }
 
         }
@@ -83,7 +85,7 @@ namespace u5_Culminating
 
         private void Movement()
         {
-            point.Y = point.Y + 10;
+            point.Y = point.Y + velocity;
             if (rotation == 0)
             {
                 if (movement == "left")

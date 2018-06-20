@@ -25,7 +25,7 @@ namespace u5_Culminating
         Rect box;
         Random r = new Random(5);
         Random x_random = new Random();
-        int Velocity = -40 - Util.FruitVelocity();
+        double Velocity = -40 - (Globals.int_Difficulty * Globals.int_Difficulty) - Util.FruitVelocity();
         string movement;
 
         public f_Banana(Canvas c, MainWindow w)
@@ -65,7 +65,7 @@ namespace u5_Culminating
         public void Tick()
         {
             Movement();
-            Velocity = Velocity + 2;
+            Velocity = Velocity + 1.8 + ((Globals.int_Difficulty - 1) / 2);
 
             Canvas.SetTop(BananaRectangle, point.Y);
             Canvas.SetLeft(BananaRectangle, point.X);
@@ -79,7 +79,7 @@ namespace u5_Culminating
 
         private void Movement()
         {
-            point.Y = point.Y + (Velocity);
+            point.Y = point.Y + Velocity;
             if (movement == "left")
             {
                 point.X = point.X + 5;

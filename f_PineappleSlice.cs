@@ -23,6 +23,7 @@ namespace u5_Culminating
         Random rnum = new Random();
         string movement;
         public int rotation = 0;
+        int velocity = 0;
 
 
         //Create Sprites
@@ -65,6 +66,8 @@ namespace u5_Culminating
         {
             Movement();
 
+            velocity++;
+            PineappleSliceRectangle.Opacity = PineappleSliceRectangle.Opacity - 0.03;
             Canvas.SetTop(PineappleSliceRectangle, point.Y);
             Canvas.SetLeft(PineappleSliceRectangle, point.X);
 
@@ -81,7 +84,7 @@ namespace u5_Culminating
 
         private void Movement()
         {
-            point.Y = point.Y + 10;
+            point.Y = point.Y + velocity;
 
             if (rotation == 0)
             {
